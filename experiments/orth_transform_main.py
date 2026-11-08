@@ -6,10 +6,16 @@ Does an ORTHOGONAL-column transform beat TrIM's  X @ H_hat ?
 
     H_hat = U diag(lam) U^T        (estimated EGOP, eigen-decomposed)
 
-Three methods, same estimated H_hat, same Mondrian settings, sweep lifetime:
+Methods, same estimated H_hat, same Mondrian settings, sweep lifetime:
     1. no transform : X
     2. TrIM         : X @ H_hat       / two_one_norm(H_hat)
     3. orthogonal   : X @ U diag(lam) / two_one_norm(H_hat)   (all d directions)
+    4. rotation XU  : X @ U    (orthonormal; its own two_one_norm is already 1)
+
+WEIGHTS (--weights) sets the target  y = sum_i w_i z_i^4.  Equal weights give
+lam_1 = lam_2, so U's top-2 eigenvectors are only defined up to a rotation;
+e.g. --weights 1,0.5 makes them distinct (true lam_2/lam_1 = 0.25).
+Diagnostic: eig_angle_i = angle (deg) between estimated u_i and true v_i.
 
 2 and 3 share the same scalar, so they differ ONLY by the final rotation U^T
 (X H_hat = (X U diag(lam)) U^T). U diag(lam) has orthogonal columns.
@@ -20,6 +26,7 @@ differences come from the transform alone.
 Usage (from the project root):
     python -u experiments/orth_transform_main.py > results/orth_transform/run.log 2>&1
     python -u experiments/orth_transform_main.py --smoke   (tiny run, checks the code works)
+    python -u experiments/orth_transform_main.py --dims 10 --weights 1,0.5 --out orth_transform_w1_05
 """
 
 # --- project paths: import from src/, write outputs under <project>/results/ ---
@@ -32,6 +39,8 @@ os.chdir(_ROOT)
 import argparse
 import os
 import time
+
+import jax.numpy as jnp
 
 import numpy as np
 import pandas as pd
@@ -51,18 +60,20 @@ from Mondrian_RF.utils import evaluate_all_lifetimes, two_one_norm
 DIMS         = [10, 20, 30]
 ROTATIONS    = [None, "orth"]        # None = aligned
 SAMPLE_RANGE = [3200, 6400]
-SEEDS        = [0, 1, 2, 3, 4]
+SEEDS        = [0]                   # 1 seed for a first look; [0, 1, 2, 3, 4] for 5 seeds
 ACTIVE       = 2
 LIFETIME     = 5
 N_ITERATIONS = 1                     # 1 = initial fit only
 STEP_SIZE    = 3.0
 N_ESTIMATORS = 30
 FUN_STR      = "poly"
+WEIGHTS      = None                  # None = equal weights (1, 1)
 N_TOTAL      = 6400
 N_TEST       = 3200
 
-METHODS = ["no transform", "TrIM", "orthogonal"]
-COLORS  = {"no transform": "tab:blue", "TrIM": "tab:green", "orthogonal": "tab:red"}
+METHODS = ["no transform", "TrIM", "orthogonal", "rotation XU"]
+COLORS  = {"no transform": "tab:blue", "TrIM": "tab:green", "orthogonal": "tab:red",
+           "rotation XU": "tab:purple"}
 
 OUT_DIR = os.path.join("results", "orth_transform")
 
@@ -78,6 +89,21 @@ def orth_matrix(H):
     lam = np.clip(lam[order], 0.0, None)
     U = U[:, order]
     return (U * lam) / two_one_norm(H)
+
+
+def sorted_eig(H):
+    H = 0.5 * (H + H.T)
+    lam, U = np.linalg.eigh(H)
+    order = np.argsort(lam)[::-1]
+    return np.clip(lam[order], 0.0, None), U[:, order]
+
+
+def eig_angles_deg(H, true_H, k):
+    """Angle (degrees) between i-th estimated and i-th true eigenvector, i < k."""
+    _, U = sorted_eig(H)
+    _, V = sorted_eig(true_H)
+    cos = np.abs(np.sum(U[:, :k] * V[:, :k], axis=0)).clip(0, 1)
+    return np.degrees(np.arccos(cos))
 
 
 class OrthTrIM(TrIM):
@@ -118,9 +144,15 @@ def run_cell(d, rotation, seed):
     x_train = np.random.rand(N_TOTAL, d) * 2 - 1
     x_test = np.random.rand(N_TEST, d) * 2 - 1
     fn = SimulatedData(d, ACTIVE, rotation=rotation, fun=FUN_STR, seed=seed)
+    if WEIGHTS is not None:                      # y = sum_i w_i z_i^4
+        fn.project = jnp.concatenate([jnp.array(WEIGHTS, dtype=float),
+                                      jnp.zeros(d - ACTIVE)])
     y_train = np.array(vmap(fn.fun)(x_train))
     y_test = np.array(vmap(fn.fun)(x_test))
     true_H = np.array(fn.get_true_H(x_test))
+    lam_true = sorted_eig(true_H)[0][:ACTIVE + 1]
+    print(f"  [d={d} rot={rotation or 'aligned'} seed={seed}] true top eigenvalues: "
+          f"{np.round(lam_true, 4).tolist()}", flush=True)
 
     rows, curves = [], {}
     for n in SAMPLE_RANGE:
@@ -131,13 +163,22 @@ def run_cell(d, rotation, seed):
         f_trim = estimate_H(x_tr, y_tr, "trim", rs)
         f_orth = f_trim if N_ITERATIONS == 1 else estimate_H(x_tr, y_tr, "orth", rs)
         A_orth = orth_matrix(f_orth.H)
+        U_rot = sorted_eig(f_orth.H)[1]
+        np.save(os.path.join(OUT_DIR, f"H_d{d}_{rotation or 'aligned'}_s{seed}_n{n}.npy"),
+                f_trim.H)
+        eig_ang = eig_angles_deg(f_trim.H, true_H, ACTIVE)
+        lam_est = sorted_eig(f_trim.H)[0][:ACTIVE + 1]
+        print(f"  n={n}: est top eigenvalues {np.round(lam_est, 4).tolist()}; "
+              f"angle(u_i, true v_i) deg = {np.round(eig_ang, 1).tolist()}", flush=True)
 
         transforms = {
             "no transform": lambda X: X,
             "TrIM": lambda X: X @ (f_trim.H / two_one_norm(f_trim.H)),
             "orthogonal": lambda X: X @ A_orth,
+            "rotation XU": lambda X: X @ U_rot,
         }
-        H_of = {"no transform": None, "TrIM": f_trim.H, "orthogonal": f_orth.H}
+        H_of = {"no transform": None, "TrIM": f_trim.H, "orthogonal": f_orth.H,
+                "rotation XU": f_orth.H}
 
         for m in METHODS:
             t0 = time.perf_counter()
@@ -155,6 +196,7 @@ def run_cell(d, rotation, seed):
                              best_lifetime=float(res["times"][i]),
                              mse_at_max_lifetime=float(mse[-1]),
                              angle=angle, sum_of_ranges=sr,
+                             **{f"eig_angle_{i + 1}": float(eig_ang[i]) for i in range(ACTIVE)},
                              seconds=time.perf_counter() - t0))
             curves[(n, m)] = (np.asarray(res["times"]), mse)
             print(f"  d={d:>3} rot={rotation or 'aligned':>7} seed={seed} n={n:>5} "
@@ -175,10 +217,23 @@ def on_grid(times, mse, grid):
 # Main
 # =============================================================
 def main():
-    global DIMS, SAMPLE_RANGE, SEEDS, N_TOTAL, N_TEST, LIFETIME, OUT_DIR
+    global DIMS, SAMPLE_RANGE, SEEDS, N_TOTAL, N_TEST, LIFETIME, OUT_DIR, WEIGHTS
     ap = argparse.ArgumentParser()
     ap.add_argument("--smoke", action="store_true")
+    ap.add_argument("--dims", type=str, help="e.g. 10 or 10,20")
+    ap.add_argument("--seeds", type=str, help="e.g. 0 or 0,1,2,3,4")
+    ap.add_argument("--weights", type=str, help="e.g. 1,0.5  (length ACTIVE)")
+    ap.add_argument("--out", type=str, help="results subfolder name")
     args = ap.parse_args()
+    if args.dims:
+        DIMS = [int(v) for v in args.dims.split(",")]
+    if args.seeds:
+        SEEDS = [int(v) for v in args.seeds.split(",")]
+    if args.weights:
+        WEIGHTS = [float(v) for v in args.weights.split(",")]
+        assert len(WEIGHTS) == ACTIVE
+    if args.out:
+        OUT_DIR = os.path.join("results", args.out)
     if args.smoke:
         DIMS, SAMPLE_RANGE, SEEDS = [5], [200], [0]
         N_TOTAL, N_TEST, LIFETIME = 200, 100, 2
@@ -187,7 +242,7 @@ def main():
 
     print(f"DIMS={DIMS} ROTATIONS={ROTATIONS} SAMPLE_RANGE={SAMPLE_RANGE} SEEDS={SEEDS}")
     print(f"ACTIVE={ACTIVE} LIFETIME={LIFETIME} N_ITERATIONS={N_ITERATIONS} "
-          f"STEP_SIZE={STEP_SIZE} N_ESTIMATORS={N_ESTIMATORS} FUN_STR={FUN_STR}")
+          f"STEP_SIZE={STEP_SIZE} N_ESTIMATORS={N_ESTIMATORS} FUN_STR={FUN_STR} WEIGHTS={WEIGHTS}")
 
     grid = np.linspace(0, LIFETIME, 201)
     all_rows, grid_curves = [], {}
@@ -231,7 +286,7 @@ def main():
             ax.ticklabel_format(axis="y", style="sci", scilimits=(-1, 1))
     axes[0][0].legend(fontsize=9)
     fig.suptitle(f"MSE vs lifetime (mean ± std over {len(SEEDS)} seeds, "
-                 f"{N_ITERATIONS} iteration)", fontsize=13)
+                 f"{N_ITERATIONS} iteration, weights={WEIGHTS or [1.0] * ACTIVE})", fontsize=13)
     fig.tight_layout()
     fig_path = os.path.join(OUT_DIR, "mse_vs_lifetime.png")
     fig.savefig(fig_path, dpi=130)
