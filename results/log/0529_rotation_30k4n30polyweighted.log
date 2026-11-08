@@ -1,0 +1,101 @@
+STEP_SIZE = 3.0
+LIFETIME = 5
+DIM_IN = 30
+ACTIVE = 2
+CSS_K = 4
+N_ITERATIONS = 1
+FUN_STR = poly
+ROTATION_MODE = orth
+Training the Mondrian Forests:
+  0%|          | 0/1 [00:00<?, ?it/s]100%|██████████| 1/1 [31:02<00:00, 1862.59s/it]100%|██████████| 1/1 [31:02<00:00, 1862.59s/it]
+  0%|          | 0/1 [00:00<?, ?it/s]100%|██████████| 1/1 [2:05:45<00:00, 7545.14s/it]100%|██████████| 1/1 [2:05:45<00:00, 7545.15s/it]
+
+Estimated EGOP angle distances:
+  Iteration 1:
+    n = 3200: angle distance = 1.117027
+    n = 6400: angle distance = 0.442698
+CSS_K = 4
+CSS random_state = 0
+N_ITERATIONS = 1
+WEIGHT_POWER = 1.0
+sample sizes:   0%|          | 0/2 [00:00<?, ?it/s]
+n = 3200
+estimated H (iteration 1) diagonal: [0.03083189 0.01605936 0.02196517 0.02721503 0.03102564 0.02161568
+ 0.02441799 0.01995049 0.0240366  0.02374743 0.01664769 0.01669389
+ 0.02726336 0.02760938 0.01698629 0.02158798 0.0218     0.01900977
+ 0.02277781 0.04569565 0.0139119  0.02150632 0.02524402 0.01578614
+ 0.02038042 0.02080728 0.01535633 0.02388586 0.0182514  0.01419973]
+estimated H (iteration 1) top diagonal indices: [19  4  0 13 12  3 22  6  8 27  9 18  2 16  5 15 21 25 24  7 17 28 14 11
+ 10  1 23 26 29 20]
+estimated H (iteration 1) eigenvalues descending: [0.18248836 0.05559492 0.04353378 0.03412713 0.0307195  0.02356449
+ 0.02187915 0.0186231  0.01802382 0.01648293 0.01582603 0.01469904
+ 0.01456381 0.01415389 0.01333984 0.0126767  0.01223554 0.01189029
+ 0.01143817 0.01120282 0.01069672 0.01033486 0.00988504 0.00954507
+ 0.00910031 0.00868722 0.00846501 0.00788359 0.00746424 0.00714115]
+  [TrIM x_tr] shape=(3200, 30), sum_of_ranges=134.3791, per_dim_ranges=[6.967, 1.823, 3.397, 6.24, 7.692, 3.267, 3.016, 3.825, 7.112, 5.544, 1.527, 1.592, 7.355, 7.349, 4.658, 3.845, 3.49, 4.038, 4.929, 10.667, 1.962, 5.564, 6.12, 2.391, 2.272, 4.311, 2.287, 3.924, 2.957, 4.257]
+TrIM runtime (n=3200): 293.7998 s
+  TrIM transform time : 0.0012 s
+  TrIM Mondrian time  : 293.7987 s
+  TrIM approx events  : 96000
+CSS estimated H selected columns by RPQR: [2, 27, 19, 29]
+  [CSS (est H) x_tr] shape=(3200, 4), sum_of_ranges=27.3443, per_dim_ranges=[7.103, 6.449, 7.737, 6.056]
+CSS runtime (n=3200): 215.8298 s
+  CSS projection time : 0.0011 s
+  CSS Mondrian time   : 215.8286 s
+  CSS approx events   : 83450
+CSS true H selected columns by RPQR: [3, 24, 14, 29]
+Weighted CSS selected columns by RPQR: [2, 27, 19, 29]
+  [Weighted CSS x_tr] shape=(3200, 4), sum_of_ranges=18.3380, per_dim_ranges=[1.114, 1.805, 2.493, 12.926]
+Weighted CSS runtime (n=3200): 46.1730 s
+  Weighted CSS projection time : 0.0011 s
+  Weighted CSS Mondrian time   : 46.1719 s
+Best MSE over lifetimes:
+  no transformation     : 1.790114e+00
+  transform by true H   : 1.115938e-01
+  TrIM                  : 1.018373e+00
+  Weighted Mondrian     : 1.764746e+00
+  CSS (estimated H)     : 1.184718e+00
+  CSS (true H)          : 4.246685e-01
+  Weighted CSS          : 1.187688e+00
+sample sizes:  50%|█████     | 1/2 [1:00:31<1:00:31, 3631.37s/it]
+n = 6400
+estimated H (iteration 1) diagonal: [0.02700108 0.01517043 0.02068053 0.0202352  0.02402602 0.01836697
+ 0.01607709 0.01789587 0.02194692 0.02303379 0.01926432 0.02502566
+ 0.01952853 0.01949203 0.02243394 0.02821941 0.02938548 0.02219248
+ 0.0282894  0.03552062 0.02610718 0.02017005 0.01762243 0.0195043
+ 0.02434001 0.01905128 0.01556281 0.02518796 0.02077792 0.01741602]
+estimated H (iteration 1) top diagonal indices: [19 16 18 15  0 20 27 11 24  4  9 14 17  8 28  2  3 21 12 23 13 10 25  5
+  7 22 29  6 26  1]
+estimated H (iteration 1) eigenvalues descending: [0.117626   0.07977765 0.03801458 0.03045005 0.02874813 0.02563771
+ 0.02212868 0.02120989 0.01946775 0.01928011 0.01805675 0.01773884
+ 0.01636631 0.01567894 0.01489412 0.01436305 0.01388484 0.01377617
+ 0.01337901 0.01287607 0.01243487 0.0117632  0.01161084 0.01137327
+ 0.01087769 0.01011709 0.00989394 0.00983899 0.00926347 0.00899776]
+  [TrIM x_tr] shape=(6400, 30), sum_of_ranges=123.8841, per_dim_ranges=[5.919, 2.178, 3.557, 4.239, 4.551, 3.064, 2.162, 2.903, 4.887, 4.653, 1.966, 3.146, 5.113, 4.779, 5.521, 5.142, 5.102, 4.484, 5.596, 6.861, 4.93, 3.581, 3.691, 3.572, 4.476, 4.154, 3.003, 3.068, 3.877, 3.708]
+TrIM runtime (n=6400): 1673.3832 s
+  TrIM transform time : 0.0008 s
+  TrIM Mondrian time  : 1673.3824 s
+  TrIM approx events  : 192000
+CSS estimated H selected columns by RPQR: [2, 27, 21, 29]
+  [CSS (est H) x_tr] shape=(6400, 4), sum_of_ranges=25.5527, per_dim_ranges=[7.2, 5.498, 6.727, 6.128]
+CSS runtime (n=6400): 913.2336 s
+  CSS projection time : 0.0014 s
+  CSS Mondrian time   : 913.2322 s
+  CSS approx events   : 153350
+CSS true H selected columns by RPQR: [3, 24, 14, 29]
+Weighted CSS selected columns by RPQR: [2, 27, 21, 29]
+  [Weighted CSS x_tr] shape=(6400, 4), sum_of_ranges=16.5116, per_dim_ranges=[1.458, 1.991, 4.437, 8.626]
+Weighted CSS runtime (n=6400): 171.8722 s
+  Weighted CSS projection time : 0.0013 s
+  Weighted CSS Mondrian time   : 171.8709 s
+Best MSE over lifetimes:
+  no transformation     : 1.735282e+00
+  transform by true H   : 6.965509e-02
+  TrIM                  : 6.807187e-01
+  Weighted Mondrian     : 1.729350e+00
+  CSS (estimated H)     : 1.259303e+00
+  CSS (true H)          : 3.011426e-01
+  Weighted CSS          : 1.192717e+00
+sample sizes: 100%|██████████| 2/2 [5:13:03<00:00, 10408.29s/it] sample sizes: 100%|██████████| 2/2 [5:13:03<00:00, 9391.76s/it] 
+
+Done. Figures are in 'results/'.

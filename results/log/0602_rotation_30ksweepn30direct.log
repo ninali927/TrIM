@@ -1,0 +1,337 @@
+STEP_SIZE = 3.0
+LIFETIME = 5
+DIM_IN = 30
+ACTIVE = 2
+CSS_K = [4, 8, 12, 16, 20, 24, 28, 30]
+N_ITERATIONS = 1
+WEIGHT_POWER = 1.0
+FUN_STR = poly
+ROTATION_MODE = orth
+Training the Mondrian Forests:
+  0%|          | 0/1 [00:00<?, ?it/s]100%|██████████| 1/1 [31:00<00:00, 1860.08s/it]100%|██████████| 1/1 [31:00<00:00, 1860.08s/it]
+  0%|          | 0/1 [00:00<?, ?it/s]100%|██████████| 1/1 [2:06:11<00:00, 7571.23s/it]100%|██████████| 1/1 [2:06:11<00:00, 7571.23s/it]
+
+Estimated EGOP angle distances:
+  Iteration 1:
+    n = 3200: angle distance = 1.117023
+    n = 6400: angle distance = 0.442683
+CSS_K_LIST = [4, 8, 12, 16, 20, 24, 28, 30]
+CSS random_state = 0
+N_ITERATIONS = 1
+WEIGHT_POWER = 1.0 (baseline Weighted CSS only)
+CSS variant = Direct TrIM-coordinate CSS
+sample sizes:   0%|          | 0/2 [00:00<?, ?it/s]
+n = 3200
+estimated H (iteration 1) diagonal: [0.03083189 0.01605936 0.02196517 0.02721503 0.03102564 0.02161568
+ 0.02441799 0.01995049 0.0240366  0.02374743 0.01664769 0.01669389
+ 0.02726336 0.02760938 0.01698629 0.02158798 0.0218     0.01900977
+ 0.02277781 0.04569565 0.0139119  0.02150632 0.02524402 0.01578614
+ 0.02038042 0.02080728 0.01535633 0.02388586 0.0182514  0.01419973]
+estimated H (iteration 1) top diagonal indices: [19  4  0 13 12  3 22  6  8 27  9 18  2 16  5 15 21 25 24  7 17 28 14 11
+ 10  1 23 26 29 20]
+estimated H (iteration 1) eigenvalues descending: [0.18248836 0.05559492 0.04353378 0.03412713 0.0307195  0.02356449
+ 0.02187915 0.0186231  0.01802382 0.01648293 0.01582603 0.01469904
+ 0.01456381 0.01415389 0.01333984 0.0126767  0.01223554 0.01189029
+ 0.01143817 0.01120282 0.01069672 0.01033486 0.00988504 0.00954507
+ 0.00910031 0.00868722 0.00846501 0.00788359 0.00746424 0.00714115]
+  --- check_kd_equivalence (k=d=30, weight_power=1.0) ---
+    TrIM singular values : [5.042775, 1.536277, 1.202987, 0.943049, 0.848884, 0.651167, 0.604595, 0.51462, 0.49806, 0.455479, 0.437327, 0.406185, 0.402448, 0.39112, 0.368625, 0.3503, 0.33811, 0.328569, 0.316076, 0.309572, 0.295587, 0.285587, 0.273157, 0.263763, 0.251472, 0.240057, 0.233917, 0.21785, 0.206262, 0.197334]
+    WCSS singular values : [8.216908, 2.503274, 1.960197, 1.536643, 1.383208, 1.061039, 0.985153, 0.838543, 0.811559, 0.742177, 0.712599, 0.661854, 0.655765, 0.637308, 0.600654, 0.570794, 0.55093, 0.535384, 0.515027, 0.50443, 0.481641, 0.465348, 0.445094, 0.429786, 0.40976, 0.39116, 0.381154, 0.354974, 0.336092, 0.321545]
+    ratio (const => only a global scalar differs): [1.6294, 1.6294, 1.6294, 1.6294, 1.6294, 1.6294, 1.6294, 1.6294, 1.6294, 1.6294, 1.6294, 1.6294, 1.6294, 1.6294, 1.6294, 1.6294, 1.6294, 1.6294, 1.6294, 1.6294, 1.6294, 1.6294, 1.6294, 1.6294, 1.6294, 1.6294, 1.6294, 1.6294, 1.6294, 1.6294]
+    ratio std/mean (->0 = pure global scalar): 5.318619e-16
+    TrIM transformed sum_of_ranges : 134.379084
+    WCSS transformed sum_of_ranges : 129.399068
+    sum_of_ranges ratio (WCSS/TrIM): 0.962941
+    => similar sum_of_ranges predicts similar MSE at k=d (same lifetime => comparable cut rate)
+  --- end check_kd_equivalence ---
+  [TrIM x_tr] shape=(3200, 30), sum_of_ranges=134.3791, per_dim_ranges=[6.967, 1.823, 3.397, 6.24, 7.692, 3.267, 3.016, 3.825, 7.112, 5.544, 1.527, 1.592, 7.355, 7.349, 4.658, 3.845, 3.49, 4.038, 4.929, 10.667, 1.962, 5.564, 6.12, 2.391, 2.272, 4.311, 2.287, 3.924, 2.957, 4.257]
+TrIM runtime (n=3200): 296.9341 s
+  TrIM transform time : 0.0005 s
+  TrIM Mondrian time  : 296.9337 s
+
+  ===== k sweep: k = 4 (n = 3200) =====
+  [k=4] Direct CSS (est H) selected columns (effective k=4): [2, 27, 19, 29]
+  [Direct CSS (est H) x_tr k=4] shape=(3200, 4), sum_of_ranges=22.2450, per_dim_ranges=[3.397, 3.924, 10.667, 4.257]
+  [k=4] Direct CSS (est H) runtime (n=3200): 58.0973 s (proj 0.0011 + mondrian 58.0962)
+  [k=4] Direct CSS (true H) selected columns (effective k=4): [0, 25, 19, 29]
+  [Direct CSS (true H) x_tr k=4] shape=(3200, 4), sum_of_ranges=20.3462, per_dim_ranges=[6.141, 3.8, 6.692, 3.713]
+  [k=4] CSS (true H) [weighted] selected columns (effective k=4): [0, 25, 19, 29]
+  [k=4] Best MSE over lifetimes:
+    no transformation     : 1.790114e+00
+    transform by true H   : 1.185588e-01
+    TrIM                  : 1.006860e+00
+    Weighted Mondrian     : 1.746402e+00
+    Direct CSS (est H)    : 1.209665e+00
+    Direct CSS (true H)   : 1.373508e-01
+    CSS (true H)          : 1.428960e-01
+
+  ===== k sweep: k = 8 (n = 3200) =====
+  [k=8] Direct CSS (est H) selected columns (effective k=8): [6, 3, 0, 10, 8, 15, 20, 14]
+  [Direct CSS (est H) x_tr k=8] shape=(3200, 8), sum_of_ranges=35.3284, per_dim_ranges=[3.016, 6.24, 6.967, 1.527, 7.112, 3.845, 1.962, 4.658]
+  [k=8] Direct CSS (est H) runtime (n=3200): 275.4975 s (proj 0.0009 + mondrian 275.4967)
+  [k=8] Direct CSS (true H) selected columns (effective k=8): [6, 3, 0, 12, 13, 18, 24, 19]
+  [Direct CSS (true H) x_tr k=8] shape=(3200, 8), sum_of_ranges=42.2555, per_dim_ranges=[2.669, 5.518, 6.141, 5.377, 6.59, 3.166, 6.102, 6.692]
+  [k=8] CSS (true H) [weighted] selected columns (effective k=8): [6, 3, 0, 12, 13, 18, 24, 19]
+  [k=8] Best MSE over lifetimes:
+    no transformation     : 1.790114e+00
+    transform by true H   : 1.185588e-01
+    TrIM                  : 1.006860e+00
+    Weighted Mondrian     : 1.746402e+00
+    Direct CSS (est H)    : 1.076182e+00
+    Direct CSS (true H)   : 1.298721e-01
+    CSS (true H)          : 1.204149e-01
+
+  ===== k sweep: k = 12 (n = 3200) =====
+  [k=12] Direct CSS (est H) selected columns (effective k=12): [13, 27, 16, 23, 26, 18, 15, 29, 28, 8, 2, 6]
+  [Direct CSS (est H) x_tr k=12] shape=(3200, 12), sum_of_ranges=48.9547, per_dim_ranges=[7.349, 3.924, 3.49, 2.391, 2.287, 4.929, 3.845, 4.257, 2.957, 7.112, 3.397, 3.016]
+  [k=12] Direct CSS (est H) runtime (n=3200): 298.0136 s (proj 0.0010 + mondrian 298.0125)
+  [k=12] Direct CSS (true H) selected columns (effective k=12): [14, 28, 18, 24, 29, 19, 17, 25, 26, 8, 0, 12]
+  [Direct CSS (true H) x_tr k=12] shape=(3200, 12), sum_of_ranges=58.3501, per_dim_ranges=[7.745, 4.375, 3.166, 6.102, 3.713, 6.692, 4.927, 3.8, 1.67, 4.641, 6.141, 5.377]
+  [k=12] CSS (true H) [weighted] selected columns (effective k=12): [14, 28, 18, 24, 29, 19, 17, 25, 26, 8, 0, 12]
+  [k=12] Best MSE over lifetimes:
+    no transformation     : 1.790114e+00
+    transform by true H   : 1.185588e-01
+    TrIM                  : 1.006860e+00
+    Weighted Mondrian     : 1.746402e+00
+    Direct CSS (est H)    : 1.185696e+00
+    Direct CSS (true H)   : 1.155345e-01
+    CSS (true H)          : 1.091976e-01
+
+  ===== k sweep: k = 16 (n = 3200) =====
+  [k=16] Direct CSS (est H) selected columns (effective k=16): [29, 25, 20, 18, 7, 2, 1, 8, 12, 15, 24, 28, 3, 0, 19, 17]
+  [Direct CSS (est H) x_tr k=16] shape=(3200, 16), sum_of_ranges=75.9580, per_dim_ranges=[4.257, 4.311, 1.962, 4.929, 3.825, 3.397, 1.823, 7.112, 7.355, 3.845, 2.272, 2.957, 6.24, 6.967, 10.667, 4.038]
+  [k=16] Direct CSS (est H) runtime (n=3200): 299.5076 s (proj 0.0012 + mondrian 299.5064)
+  [k=16] Direct CSS (true H) selected columns (effective k=16): [29, 24, 20, 17, 7, 3, 0, 8, 14, 16, 22, 28, 5, 4, 19, 21]
+  [Direct CSS (true H) x_tr k=16] shape=(3200, 16), sum_of_ranges=82.0260, per_dim_ranges=[3.713, 6.102, 6.892, 4.927, 4.741, 5.518, 6.141, 4.641, 7.745, 3.48, 2.76, 4.375, 2.999, 7.843, 6.692, 3.456]
+  [k=16] CSS (true H) [weighted] selected columns (effective k=16): [29, 24, 20, 17, 7, 3, 0, 8, 14, 16, 22, 28, 5, 4, 19, 21]
+  [k=16] Best MSE over lifetimes:
+    no transformation     : 1.790114e+00
+    transform by true H   : 1.185588e-01
+    TrIM                  : 1.006860e+00
+    Weighted Mondrian     : 1.746402e+00
+    Direct CSS (est H)    : 1.037951e+00
+    Direct CSS (true H)   : 1.181495e-01
+    CSS (true H)          : 1.128677e-01
+
+  ===== k sweep: k = 20 (n = 3200) =====
+  [k=20] Direct CSS (est H) selected columns (effective k=20): [16, 6, 18, 3, 29, 26, 10, 5, 8, 14, 0, 21, 13, 12, 24, 22, 27, 7, 23, 19]
+  [Direct CSS (est H) x_tr k=20] shape=(3200, 20), sum_of_ranges=97.2178, per_dim_ranges=[3.49, 3.016, 4.929, 6.24, 4.257, 2.287, 1.527, 3.267, 7.112, 4.658, 6.967, 5.564, 7.349, 7.355, 2.272, 6.12, 3.924, 3.825, 2.391, 10.667]
+  [k=20] Direct CSS (est H) runtime (n=3200): 295.3015 s (proj 0.0013 + mondrian 295.3003)
+  [k=20] Direct CSS (true H) selected columns (effective k=20): [16, 6, 18, 3, 29, 25, 11, 5, 7, 14, 0, 20, 13, 12, 24, 19, 28, 8, 22, 21]
+  [Direct CSS (true H) x_tr k=20] shape=(3200, 20), sum_of_ranges=95.2995, per_dim_ranges=[3.48, 2.669, 3.166, 5.518, 3.713, 3.8, 4.442, 2.999, 4.741, 7.745, 6.141, 6.892, 6.59, 5.377, 6.102, 6.692, 4.375, 4.641, 2.76, 3.456]
+  [k=20] CSS (true H) [weighted] selected columns (effective k=20): [16, 6, 18, 3, 29, 25, 11, 5, 7, 14, 0, 20, 13, 12, 24, 19, 28, 8, 22, 21]
+  [k=20] Best MSE over lifetimes:
+    no transformation     : 1.790114e+00
+    transform by true H   : 1.185588e-01
+    TrIM                  : 1.006860e+00
+    Weighted Mondrian     : 1.746402e+00
+    Direct CSS (est H)    : 1.082260e+00
+    Direct CSS (true H)   : 1.231511e-01
+    CSS (true H)          : 1.206506e-01
+
+  ===== k sweep: k = 24 (n = 3200) =====
+  [k=24] Direct CSS (est H) selected columns (effective k=24): [4, 7, 1, 22, 13, 10, 23, 11, 24, 26, 6, 29, 5, 9, 8, 16, 19, 20, 27, 28, 2, 18, 0, 15]
+  [Direct CSS (est H) x_tr k=24] shape=(3200, 24), sum_of_ranges=102.2123, per_dim_ranges=[7.692, 3.825, 1.823, 6.12, 7.349, 1.527, 2.391, 1.592, 2.272, 2.287, 3.016, 4.257, 3.267, 5.544, 7.112, 3.49, 10.667, 1.962, 3.924, 2.957, 3.397, 4.929, 6.967, 3.845]
+  [k=24] Direct CSS (est H) runtime (n=3200): 294.7463 s (proj 0.0015 + mondrian 294.7448)
+  [k=24] Direct CSS (true H) selected columns (effective k=24): [4, 7, 1, 20, 12, 9, 21, 11, 23, 24, 5, 29, 3, 8, 6, 14, 16, 17, 28, 22, 2, 19, 0, 18]
+  [Direct CSS (true H) x_tr k=24] shape=(3200, 24), sum_of_ranges=106.2412, per_dim_ranges=[7.843, 4.741, 1.245, 6.892, 5.377, 1.555, 3.456, 4.442, 2.716, 6.102, 2.999, 3.713, 5.518, 4.641, 2.669, 7.745, 3.48, 4.927, 4.375, 2.76, 3.044, 6.692, 6.141, 3.166]
+  [k=24] CSS (true H) [weighted] selected columns (effective k=24): [4, 7, 1, 20, 12, 9, 21, 11, 23, 24, 5, 29, 3, 8, 6, 14, 16, 17, 28, 22, 2, 19, 0, 18]
+  [k=24] Best MSE over lifetimes:
+    no transformation     : 1.790114e+00
+    transform by true H   : 1.185588e-01
+    TrIM                  : 1.006860e+00
+    Weighted Mondrian     : 1.746402e+00
+    Direct CSS (est H)    : 1.019941e+00
+    Direct CSS (true H)   : 1.120803e-01
+    CSS (true H)          : 1.361725e-01
+
+  ===== k sweep: k = 28 (n = 3200) =====
+  [k=28] Direct CSS (est H) selected columns (effective k=28): [2, 22, 0, 28, 17, 15, 9, 27, 7, 24, 29, 21, 13, 3, 12, 11, 5, 14, 10, 6, 18, 8, 20, 1, 26, 25, 19, 23]
+  [Direct CSS (est H) x_tr k=28] shape=(3200, 28), sum_of_ranges=123.1971, per_dim_ranges=[3.397, 6.12, 6.967, 2.957, 4.038, 3.845, 5.544, 3.924, 3.825, 2.272, 4.257, 5.564, 7.349, 6.24, 7.355, 1.592, 3.267, 4.658, 1.527, 3.016, 4.929, 7.112, 1.962, 1.823, 2.287, 4.311, 10.667, 2.391]
+  [k=28] Direct CSS (est H) runtime (n=3200): 295.0373 s (proj 0.0016 + mondrian 295.0357)
+  [k=28] Direct CSS (true H) selected columns (effective k=28): [3, 22, 0, 29, 17, 15, 8, 26, 7, 23, 28, 20, 13, 2, 12, 11, 5, 14, 10, 4, 18, 9, 19, 1, 25, 24, 16, 6]
+  [Direct CSS (true H) x_tr k=28] shape=(3200, 28), sum_of_ranges=117.9420, per_dim_ranges=[5.518, 2.76, 6.141, 3.713, 4.927, 1.949, 4.641, 1.67, 4.741, 2.716, 4.375, 6.892, 6.59, 3.044, 5.377, 4.442, 2.999, 7.745, 1.148, 7.843, 3.166, 1.555, 6.692, 1.245, 3.8, 6.102, 3.48, 2.669]
+  [k=28] CSS (true H) [weighted] selected columns (effective k=28): [3, 22, 0, 29, 17, 15, 8, 26, 7, 23, 28, 20, 13, 2, 12, 11, 5, 14, 10, 4, 18, 9, 19, 1, 25, 24, 16, 6]
+  [k=28] Best MSE over lifetimes:
+    no transformation     : 1.790114e+00
+    transform by true H   : 1.185588e-01
+    TrIM                  : 1.006860e+00
+    Weighted Mondrian     : 1.746402e+00
+    Direct CSS (est H)    : 1.058079e+00
+    Direct CSS (true H)   : 1.184046e-01
+    CSS (true H)          : 1.307021e-01
+
+  ===== k sweep: k = 30 (n = 3200) =====
+  [k=30] Direct CSS (est H) selected columns (effective k=30): [29, 20, 10, 7, 27, 3, 21, 26, 17, 11, 4, 9, 19, 18, 25, 24, 22, 23, 5, 8, 6, 14, 15, 2, 0, 12, 13, 28, 16, 1]
+  [Direct CSS (est H) x_tr k=30] shape=(3200, 30), sum_of_ranges=134.3791, per_dim_ranges=[4.257, 1.962, 1.527, 3.825, 3.924, 6.24, 5.564, 2.287, 4.038, 1.592, 7.692, 5.544, 10.667, 4.929, 4.311, 2.272, 6.12, 2.391, 3.267, 7.112, 3.016, 4.658, 3.845, 3.397, 6.967, 7.355, 7.349, 2.957, 3.49, 1.823]
+  [k=30] Direct CSS (est H) runtime (n=3200): 294.7346 s (proj 0.0016 + mondrian 294.7330)
+  [k=30] Direct CSS (true H) selected columns (effective k=30): [29, 20, 10, 7, 27, 3, 21, 26, 17, 11, 4, 9, 19, 18, 25, 24, 22, 23, 5, 8, 6, 14, 15, 2, 0, 12, 13, 28, 16, 1]
+  [Direct CSS (true H) x_tr k=30] shape=(3200, 30), sum_of_ranges=121.8451, per_dim_ranges=[3.713, 6.892, 1.148, 4.741, 0.447, 5.518, 3.456, 1.67, 4.927, 4.442, 7.843, 1.555, 6.692, 3.166, 3.8, 6.102, 2.76, 2.716, 2.999, 4.641, 2.669, 7.745, 1.949, 3.044, 6.141, 5.377, 6.59, 4.375, 3.48, 1.245]
+  [k=30] CSS (true H) [weighted] selected columns (effective k=30): [29, 20, 10, 7, 27, 3, 21, 26, 17, 11, 4, 9, 19, 18, 25, 24, 22, 23, 5, 8, 6, 14, 15, 2, 0, 12, 13, 28, 16, 1]
+  [k=30] Best MSE over lifetimes:
+    no transformation     : 1.790114e+00
+    transform by true H   : 1.185588e-01
+    TrIM                  : 1.006860e+00
+    Weighted Mondrian     : 1.746402e+00
+    Direct CSS (est H)    : 1.026290e+00
+    Direct CSS (true H)   : 1.255749e-01
+    CSS (true H)          : 1.157150e-01
+sample sizes:  50%|█████     | 1/2 [1:58:08<1:58:08, 7088.13s/it]
+n = 6400
+estimated H (iteration 1) diagonal: [0.02700108 0.01517043 0.02068053 0.0202352  0.02402602 0.01836697
+ 0.01607709 0.01789587 0.02194692 0.02303379 0.01926432 0.02502566
+ 0.01952853 0.01949203 0.02243394 0.02821941 0.02938548 0.02219248
+ 0.0282894  0.03552062 0.02610718 0.02017005 0.01762243 0.0195043
+ 0.02434001 0.01905128 0.01556281 0.02518796 0.02077792 0.01741602]
+estimated H (iteration 1) top diagonal indices: [19 16 18 15  0 20 27 11 24  4  9 14 17  8 28  2  3 21 12 23 13 10 25  5
+  7 22 29  6 26  1]
+estimated H (iteration 1) eigenvalues descending: [0.117626   0.07977765 0.03801458 0.03045005 0.02874813 0.02563771
+ 0.02212868 0.02120989 0.01946775 0.01928011 0.01805675 0.01773884
+ 0.01636631 0.01567894 0.01489412 0.01436305 0.01388484 0.01377617
+ 0.01337901 0.01287607 0.01243487 0.0117632  0.01161084 0.01137327
+ 0.01087769 0.01011709 0.00989394 0.00983899 0.00926347 0.00899776]
+  --- check_kd_equivalence (k=d=30, weight_power=1.0) ---
+    TrIM singular values : [3.872967, 2.626768, 1.251672, 1.002602, 0.946564, 0.84415, 0.728612, 0.698359, 0.640997, 0.634819, 0.594539, 0.584071, 0.538879, 0.516247, 0.490406, 0.472919, 0.457174, 0.453596, 0.440519, 0.423959, 0.409432, 0.387317, 0.3823, 0.374477, 0.35816, 0.333116, 0.325769, 0.32396, 0.30501, 0.296261]
+    WCSS singular values : [5.350481, 3.628864, 1.729178, 1.385088, 1.307673, 1.166188, 1.006573, 0.964779, 0.885534, 0.876999, 0.821352, 0.806891, 0.744458, 0.713192, 0.677492, 0.653335, 0.631583, 0.62664, 0.608574, 0.585697, 0.565628, 0.535076, 0.528145, 0.517338, 0.494796, 0.460198, 0.450048, 0.447548, 0.42137, 0.409283]
+    ratio (const => only a global scalar differs): [1.3815, 1.3815, 1.3815, 1.3815, 1.3815, 1.3815, 1.3815, 1.3815, 1.3815, 1.3815, 1.3815, 1.3815, 1.3815, 1.3815, 1.3815, 1.3815, 1.3815, 1.3815, 1.3815, 1.3815, 1.3815, 1.3815, 1.3815, 1.3815, 1.3815, 1.3815, 1.3815, 1.3815, 1.3815, 1.3815]
+    ratio std/mean (->0 = pure global scalar): 5.977983e-16
+    TrIM transformed sum_of_ranges : 123.884067
+    WCSS transformed sum_of_ranges : 130.531584
+    sum_of_ranges ratio (WCSS/TrIM): 1.053659
+    => similar sum_of_ranges predicts similar MSE at k=d (same lifetime => comparable cut rate)
+  --- end check_kd_equivalence ---
+  [TrIM x_tr] shape=(6400, 30), sum_of_ranges=123.8841, per_dim_ranges=[5.919, 2.178, 3.557, 4.239, 4.551, 3.064, 2.162, 2.903, 4.887, 4.653, 1.966, 3.146, 5.113, 4.779, 5.521, 5.142, 5.102, 4.484, 5.596, 6.861, 4.93, 3.581, 3.691, 3.572, 4.476, 4.154, 3.003, 3.068, 3.877, 3.708]
+TrIM runtime (n=6400): 1678.0587 s
+  TrIM transform time : 0.0005 s
+  TrIM Mondrian time  : 1678.0582 s
+
+  ===== k sweep: k = 4 (n = 6400) =====
+  [k=4] Direct CSS (est H) selected columns (effective k=4): [2, 27, 21, 29]
+  [Direct CSS (est H) x_tr k=4] shape=(6400, 4), sum_of_ranges=13.9141, per_dim_ranges=[3.557, 3.068, 3.581, 3.708]
+  [k=4] Direct CSS (est H) runtime (n=6400): 148.9272 s (proj 0.0010 + mondrian 148.9262)
+  [k=4] Direct CSS (true H) selected columns (effective k=4): [0, 25, 19, 29]
+  [Direct CSS (true H) x_tr k=4] shape=(6400, 4), sum_of_ranges=21.6777, per_dim_ranges=[6.634, 4.331, 6.692, 4.021]
+  [k=4] CSS (true H) [weighted] selected columns (effective k=4): [0, 25, 19, 29]
+  [k=4] Best MSE over lifetimes:
+    no transformation     : 1.758133e+00
+    transform by true H   : 6.840138e-02
+    TrIM                  : 6.955837e-01
+    Weighted Mondrian     : 1.734322e+00
+    Direct CSS (est H)    : 1.236266e+00
+    Direct CSS (true H)   : 7.917566e-02
+    CSS (true H)          : 8.508177e-02
+
+  ===== k sweep: k = 8 (n = 6400) =====
+  [k=8] Direct CSS (est H) selected columns (effective k=8): [9, 4, 1, 12, 10, 19, 23, 21]
+  [Direct CSS (est H) x_tr k=8] shape=(6400, 8), sum_of_ranges=32.4759, per_dim_ranges=[4.653, 4.551, 2.178, 5.113, 1.966, 6.861, 3.572, 3.581]
+  [k=8] Direct CSS (est H) runtime (n=6400): 1546.1915 s (proj 0.0009 + mondrian 1546.1905)
+  [k=8] Direct CSS (true H) selected columns (effective k=8): [6, 3, 0, 12, 13, 18, 24, 19]
+  [Direct CSS (true H) x_tr k=8] shape=(6400, 8), sum_of_ranges=44.3039, per_dim_ranges=[3.016, 6.124, 6.634, 5.561, 6.673, 3.166, 6.437, 6.692]
+  [k=8] CSS (true H) [weighted] selected columns (effective k=8): [6, 3, 0, 12, 13, 18, 24, 19]
+  [k=8] Best MSE over lifetimes:
+    no transformation     : 1.758133e+00
+    transform by true H   : 6.840138e-02
+    TrIM                  : 6.955837e-01
+    Weighted Mondrian     : 1.734322e+00
+    Direct CSS (est H)    : 1.008426e+00
+    Direct CSS (true H)   : 6.396608e-02
+    CSS (true H)          : 7.535512e-02
+
+  ===== k sweep: k = 12 (n = 6400) =====
+  [k=12] Direct CSS (est H) selected columns (effective k=12): [15, 27, 18, 24, 28, 20, 16, 29, 25, 8, 0, 3]
+  [Direct CSS (est H) x_tr k=12] shape=(6400, 12), sum_of_ranges=55.0978, per_dim_ranges=[5.142, 3.068, 5.596, 4.476, 3.877, 4.93, 5.102, 3.708, 4.154, 4.887, 5.919, 4.239]
+  [k=12] Direct CSS (est H) runtime (n=6400): 1632.0909 s (proj 0.0011 + mondrian 1632.0899)
+  [k=12] Direct CSS (true H) selected columns (effective k=12): [14, 28, 18, 24, 29, 19, 17, 25, 26, 8, 0, 12]
+  [Direct CSS (true H) x_tr k=12] shape=(6400, 12), sum_of_ranges=61.0016, per_dim_ranges=[7.828, 4.934, 3.166, 6.437, 4.021, 6.692, 5.0, 4.331, 1.701, 4.696, 6.634, 5.561]
+  [k=12] CSS (true H) [weighted] selected columns (effective k=12): [14, 28, 18, 24, 29, 19, 17, 25, 26, 8, 0, 12]
+  [k=12] Best MSE over lifetimes:
+    no transformation     : 1.758133e+00
+    transform by true H   : 6.840138e-02
+    TrIM                  : 6.955837e-01
+    Weighted Mondrian     : 1.734322e+00
+    Direct CSS (est H)    : 7.503416e-01
+    Direct CSS (true H)   : 7.351678e-02
+    CSS (true H)          : 8.091678e-02
+
+  ===== k sweep: k = 16 (n = 6400) =====
+  [k=16] Direct CSS (est H) selected columns (effective k=16): [29, 25, 20, 17, 8, 3, 1, 7, 11, 15, 23, 28, 2, 0, 12, 19]
+  [Direct CSS (est H) x_tr k=16] shape=(6400, 16), sum_of_ranges=68.6703, per_dim_ranges=[3.708, 4.154, 4.93, 4.484, 4.887, 4.239, 2.178, 2.903, 3.146, 5.142, 3.572, 3.877, 3.557, 5.919, 5.113, 6.861]
+  [k=16] Direct CSS (est H) runtime (n=6400): 1648.0507 s (proj 0.0012 + mondrian 1648.0495)
+  [k=16] Direct CSS (true H) selected columns (effective k=16): [29, 24, 20, 17, 7, 3, 0, 8, 14, 16, 22, 28, 5, 4, 19, 21]
+  [Direct CSS (true H) x_tr k=16] shape=(6400, 16), sum_of_ranges=87.2737, per_dim_ranges=[4.021, 6.437, 7.824, 5.0, 4.79, 6.124, 6.634, 4.696, 7.828, 4.069, 3.076, 4.934, 3.356, 8.193, 6.692, 3.601]
+  [k=16] CSS (true H) [weighted] selected columns (effective k=16): [29, 24, 20, 17, 7, 3, 0, 8, 14, 16, 22, 28, 5, 4, 19, 21]
+  [k=16] Best MSE over lifetimes:
+    no transformation     : 1.758133e+00
+    transform by true H   : 6.840138e-02
+    TrIM                  : 6.955837e-01
+    Weighted Mondrian     : 1.734322e+00
+    Direct CSS (est H)    : 6.487924e-01
+    Direct CSS (true H)   : 7.898948e-02
+    CSS (true H)          : 6.581528e-02
+
+  ===== k sweep: k = 20 (n = 6400) =====
+  [k=20] Direct CSS (est H) selected columns (effective k=20): [16, 7, 18, 3, 29, 26, 11, 6, 8, 14, 0, 20, 13, 10, 24, 22, 27, 5, 25, 19]
+  [Direct CSS (est H) x_tr k=20] shape=(6400, 20), sum_of_ranges=83.1760, per_dim_ranges=[5.102, 2.903, 5.596, 4.239, 3.708, 3.003, 3.146, 2.162, 4.887, 5.521, 5.919, 4.93, 4.779, 1.966, 4.476, 3.691, 3.068, 3.064, 4.154, 6.861]
+  [k=20] Direct CSS (est H) runtime (n=6400): 1651.2421 s (proj 0.0013 + mondrian 1651.2408)
+  [k=20] Direct CSS (true H) selected columns (effective k=20): [16, 6, 18, 3, 29, 25, 11, 5, 7, 14, 0, 20, 13, 12, 24, 19, 28, 8, 22, 21]
+  [Direct CSS (true H) x_tr k=20] shape=(6400, 20), sum_of_ranges=101.5074, per_dim_ranges=[4.069, 3.016, 3.166, 6.124, 4.021, 4.331, 4.678, 3.356, 4.79, 7.828, 6.634, 7.824, 6.673, 5.561, 6.437, 6.692, 4.934, 4.696, 3.076, 3.601]
+  [k=20] CSS (true H) [weighted] selected columns (effective k=20): [16, 6, 18, 3, 29, 25, 11, 5, 7, 14, 0, 20, 13, 12, 24, 19, 28, 8, 22, 21]
+  [k=20] Best MSE over lifetimes:
+    no transformation     : 1.758133e+00
+    transform by true H   : 6.840138e-02
+    TrIM                  : 6.955837e-01
+    Weighted Mondrian     : 1.734322e+00
+    Direct CSS (est H)    : 6.486759e-01
+    Direct CSS (true H)   : 6.530606e-02
+    CSS (true H)          : 7.693275e-02
+
+  ===== k sweep: k = 24 (n = 6400) =====
+  [k=24] Direct CSS (est H) selected columns (effective k=24): [4, 7, 1, 21, 13, 10, 23, 11, 22, 25, 6, 29, 5, 12, 8, 16, 18, 19, 27, 28, 2, 17, 0, 15]
+  [Direct CSS (est H) x_tr k=24] shape=(6400, 24), sum_of_ranges=97.0612, per_dim_ranges=[4.551, 2.903, 2.178, 3.581, 4.779, 1.966, 3.572, 3.146, 3.691, 4.154, 2.162, 3.708, 3.064, 5.113, 4.887, 5.102, 5.596, 6.861, 3.068, 3.877, 3.557, 4.484, 5.919, 5.142]
+  [k=24] Direct CSS (est H) runtime (n=6400): 1631.5862 s (proj 0.0017 + mondrian 1631.5845)
+  [k=24] Direct CSS (true H) selected columns (effective k=24): [4, 7, 1, 20, 12, 9, 21, 11, 23, 24, 5, 29, 3, 8, 6, 14, 16, 17, 28, 22, 2, 19, 0, 18]
+  [Direct CSS (true H) x_tr k=24] shape=(6400, 24), sum_of_ranges=112.9967, per_dim_ranges=[8.193, 4.79, 1.391, 7.824, 5.561, 1.627, 3.601, 4.678, 2.882, 6.437, 3.356, 4.021, 6.124, 4.696, 3.016, 7.828, 4.069, 5.0, 4.934, 3.076, 3.401, 6.692, 6.634, 3.166]
+  [k=24] CSS (true H) [weighted] selected columns (effective k=24): [4, 7, 1, 20, 12, 9, 21, 11, 23, 24, 5, 29, 3, 8, 6, 14, 16, 17, 28, 22, 2, 19, 0, 18]
+  [k=24] Best MSE over lifetimes:
+    no transformation     : 1.758133e+00
+    transform by true H   : 6.840138e-02
+    TrIM                  : 6.955837e-01
+    Weighted Mondrian     : 1.734322e+00
+    Direct CSS (est H)    : 7.249893e-01
+    Direct CSS (true H)   : 7.425806e-02
+    CSS (true H)          : 7.963778e-02
+
+  ===== k sweep: k = 28 (n = 6400) =====
+  [k=28] Direct CSS (est H) selected columns (effective k=28): [2, 22, 0, 29, 18, 15, 9, 27, 8, 24, 28, 21, 13, 3, 12, 11, 6, 16, 10, 4, 17, 7, 20, 1, 26, 25, 19, 23]
+  [Direct CSS (est H) x_tr k=28] shape=(6400, 28), sum_of_ranges=115.2990, per_dim_ranges=[3.557, 3.691, 5.919, 3.708, 5.596, 5.142, 4.653, 3.068, 4.887, 4.476, 3.877, 3.581, 4.779, 4.239, 5.113, 3.146, 2.162, 5.102, 1.966, 4.551, 4.484, 2.903, 4.93, 2.178, 3.003, 4.154, 6.861, 3.572]
+  [k=28] Direct CSS (est H) runtime (n=6400): 1627.4010 s (proj 0.0016 + mondrian 1627.3994)
+  [k=28] Direct CSS (true H) selected columns (effective k=28): [3, 22, 0, 29, 17, 15, 8, 26, 7, 23, 28, 20, 13, 2, 12, 11, 5, 14, 10, 4, 18, 9, 19, 1, 25, 24, 16, 6]
+  [Direct CSS (true H) x_tr k=28] shape=(6400, 28), sum_of_ranges=125.3042, per_dim_ranges=[6.124, 3.076, 6.634, 4.021, 5.0, 2.029, 4.696, 1.701, 4.79, 2.882, 4.934, 7.824, 6.673, 3.401, 5.561, 4.678, 3.356, 7.828, 1.174, 8.193, 3.166, 1.627, 6.692, 1.391, 4.331, 6.437, 4.069, 3.016]
+  [k=28] CSS (true H) [weighted] selected columns (effective k=28): [3, 22, 0, 29, 17, 15, 8, 26, 7, 23, 28, 20, 13, 2, 12, 11, 5, 14, 10, 4, 18, 9, 19, 1, 25, 24, 16, 6]
+  [k=28] Best MSE over lifetimes:
+    no transformation     : 1.758133e+00
+    transform by true H   : 6.840138e-02
+    TrIM                  : 6.955837e-01
+    Weighted Mondrian     : 1.734322e+00
+    Direct CSS (est H)    : 7.275291e-01
+    Direct CSS (true H)   : 6.421536e-02
+    CSS (true H)          : 7.877065e-02
+
+  ===== k sweep: k = 30 (n = 6400) =====
+  [k=30] Direct CSS (est H) selected columns (effective k=30): [29, 20, 10, 7, 27, 3, 21, 26, 17, 11, 4, 9, 19, 18, 25, 24, 22, 23, 5, 8, 6, 14, 15, 2, 0, 12, 13, 28, 16, 1]
+  [Direct CSS (est H) x_tr k=30] shape=(6400, 30), sum_of_ranges=123.8841, per_dim_ranges=[3.708, 4.93, 1.966, 2.903, 3.068, 4.239, 3.581, 3.003, 4.484, 3.146, 4.551, 4.653, 6.861, 5.596, 4.154, 4.476, 3.691, 3.572, 3.064, 4.887, 2.162, 5.521, 5.142, 3.557, 5.919, 5.113, 4.779, 3.877, 5.102, 2.178]
+  [k=30] Direct CSS (est H) runtime (n=6400): 1614.0460 s (proj 0.0017 + mondrian 1614.0443)
+  [k=30] Direct CSS (true H) selected columns (effective k=30): [29, 20, 10, 7, 27, 3, 21, 26, 17, 11, 4, 9, 19, 18, 25, 24, 22, 23, 5, 8, 6, 14, 15, 2, 0, 12, 13, 28, 16, 1]
+  [Direct CSS (true H) x_tr k=30] shape=(6400, 30), sum_of_ranges=129.4158, per_dim_ranges=[4.021, 7.824, 1.174, 4.79, 0.511, 6.124, 3.601, 1.701, 5.0, 4.678, 8.193, 1.627, 6.692, 3.166, 4.331, 6.437, 3.076, 2.882, 3.356, 4.696, 3.016, 7.828, 2.029, 3.401, 6.634, 5.561, 6.673, 4.934, 4.069, 1.391]
+  [k=30] CSS (true H) [weighted] selected columns (effective k=30): [29, 20, 10, 7, 27, 3, 21, 26, 17, 11, 4, 9, 19, 18, 25, 24, 22, 23, 5, 8, 6, 14, 15, 2, 0, 12, 13, 28, 16, 1]
+  [k=30] Best MSE over lifetimes:
+    no transformation     : 1.758133e+00
+    transform by true H   : 6.840138e-02
+    TrIM                  : 6.955837e-01
+    Weighted Mondrian     : 1.734322e+00
+    Direct CSS (est H)    : 6.953495e-01
+    Direct CSS (true H)   : 7.165642e-02
+    CSS (true H)          : 7.332025e-02
+sample sizes: 100%|██████████| 2/2 [10:29:46<00:00, 20976.52s/it]sample sizes: 100%|██████████| 2/2 [10:29:46<00:00, 18893.26s/it]
+
+Done. Figures are in 'results/'.

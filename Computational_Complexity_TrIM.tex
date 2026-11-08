@@ -1,0 +1,331 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,booktabs,tabularx,array}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[hidelinks]{hyperref}
+\newcolumntype{Y}{>{\raggedright\arraybackslash}X}
+\newcommand{\code}[1]{\texttt{\detokenize{#1}}}
+\title{Computational Complexity of Mondrian Forests and the TrIM Algorithm}
+\author{Nina Li}
+\date{}
+
+\begin{document}
+\maketitle
+
+\section{Overview}
+
+This report examines the computational cost of the optimized Mondrian-based TrIM implementation in \code{TrIM_project/estimatedH_CSS/src/}. The main question is which computations remain expensive after the three runtime optimizations described in my previous report~\cite{optimization}. The analysis follows the current source code rather than assuming that it has the complexity of a conventional decision-tree implementation. No new timing experiments were performed.
+
+The main finding is that estimating the expected gradient outer product (EGOP) matrix requires many repeated forest predictions. Each EGOP estimate makes two prediction calls per input coordinate. The current prediction routine also contains expensive bookkeeping that is repeated in every call. In later TrIM iterations, the code additionally repeats a dense input transformation for every finite-difference perturbation. Downstream regression has a separate cost, particularly when the experiment evaluates many lifetime checkpoints or comparison methods.
+
+\paragraph{Scope and evidence.}
+Statements about function calls and loops are established by the inspected code. Operation counts use standard dense-arithmetic and Python-list costs. Bounds involving tree shape or sparse indexing are identified as conditional. All measured runtimes come from the previous optimization report; they are not new benchmarks. The original implementation is compared using the code excerpts in that report, rather than a separately executed historical checkout.
+
+\begin{table}[htbp]
+\centering\small
+\begin{tabularx}{\textwidth}{lY}
+\toprule
+Symbol & Meaning \\
+\midrule
+$n$, $q$ & Number of training samples and prediction/test samples, respectively. \\
+$d$, $M$, $\lambda$ & Input dimension, number of trees, and maximum lifetime. \\
+$K$ & Number of EGOP estimation rounds in one TrIM fit. \\
+$S_m$, $S$ & Processed splits in tree $m$, and total splits $S=\sum_m S_m$. \\
+$L_m$ & Final active leaves in tree $m$; $L_m=1+S_m$. \\
+$B_n$ & Sum, over all processed splits, of the number of training samples in the split node. \\
+$B_q$ & Analogous total participation of prediction samples when replaying splits. \\
+\bottomrule
+\end{tabularx}
+\caption{Notation. Split counts and sample participation can differ between the original and transformed datasets.}
+\end{table}
+
+\section{Computational Complexity of Mondrian Forests}
+
+\subsection{How lifetime and data ranges determine growth}
+
+The function \code{sample_cut} computes the rate
+\begin{equation}
+r=\sum_{j=1}^{d}(u_j-\ell_j),
+\end{equation}
+where $\ell_j$ and $u_j$ are the minimum and maximum training coordinates in the current node. It samples an exponential waiting time with mean $1/r$. A candidate split is processed only if its time is less than $\lambda$. A zero rate produces an infinite waiting time.
+
+Thus, a larger lifetime permits more splits, and a larger sum of coordinate ranges makes the next split arrive sooner on average. However, $\lambda r$ is not a formula for the total expected split count: after a split, two child nodes have new, data-dependent rates. Increasing dimension can increase these rates when the additional coordinates have nonzero ranges, but does not do so for constant coordinates.
+
+The implementation recomputes bounding boxes from the training samples in each child. It does not explicitly construct every empty cell of a full-domain Mondrian partition. Assuming nondegenerate cuts with nonempty training children, every tree has at most $n$ nonempty leaves, giving
+\begin{equation}
+S_m\leq n-1,\qquad S\leq M(n-1).
+\end{equation}
+Identical training locations can stop growth earlier. These are sample-based bounds, not a claim that the maximum number of splits is reached at a particular lifetime. Empty-child floating-point degeneracies are outside this assumption.
+
+\subsection{Processing one split}
+
+The function \code{train} grows all $M$ trees using one event heap. For a node containing $n_e$ training samples, a split partitions the samples in $O(n_e)$ time, rewrites their sparse membership indices in $O(n_e)$ time, and recomputes both child bounding boxes in $O(dn_e)$ time. Sampling the two child cuts costs $O(d)$; heap operations have an $O(\log(M+S))$ upper bound per event. The code also removes the parent leaf from a Python list, which has a linear cost in that tree's current number of leaves.
+
+Consequently, the total bounding-box work is
+\begin{equation}
+O(dB_n),\qquad B_n=\sum_{e=1}^{S} n_e.
+\end{equation}
+This expression counts repeated sample visits explicitly. If trees are balanced, $B_n=O(Mn\log n)$; highly unbalanced trees can give $B_n=O(Mn^2)$. Balanced growth is not guaranteed by the source code. The remaining per-tree list updates have the upper bound $O(S+\sum_m S_m^2)$.
+
+\subsection{Leaf fitting, sparse indexing, and prediction}
+
+The sparse membership matrix has $nM$ stored nonzeros, one membership per sample per tree. Its column count is $C=M+2S$, because child columns are appended without deleting the inactive parent columns. After extracting one tree's active columns, \code{_leaf_weights} takes $O(n+L_m)$ time. Extracting those columns has its own cost: CSR column indexing can scan entries belonging to the other trees as well.
+
+For reference, under the conservative assumption that one CSR column extraction costs $O(nM+C+L_m)$, the $M$ extractions in \code{train} contribute $O(nM^2+MC+M+S)$. This is a conditional sparse-library bound, not a measured cost for the installed SciPy version. It should not be interpreted as evidence that sparse indexing dominates every run.
+
+Prediction is implemented by \code{evaluate}, which replays the split history on the requested samples. It does not simply traverse a stored tree for each sample. In particular, it repeatedly calls \code{history.pop(0)}. Removing the first element of a Python list shifts the remaining references, so replaying $S$ events incurs
+\begin{equation}
+(S-1)+(S-2)+\cdots+1=\Theta(S^2)
+\end{equation}
+reference movements. This cost is present independently of the number of samples reaching each node.
+
+To make the pipeline formulas readable, let $F$ denote the cost of one forest fit and $P(q)$ the cost of one forest prediction on $q$ samples. Their components are made explicit below; they are not constant-cost operations.
+\begin{align}
+F=O\bigl(&nd+nM^2+MC+Md+dB_n+Sd \nonumber\\
+         &+S\log(M+S)+\textstyle\sum_m S_m^2\bigr),\label{eq:fit}\\
+P(q)=O\bigl(&n+qd+qM^2+MC+B_q+S^2\bigr).\label{eq:predict}
+\end{align}
+Equations~\eqref{eq:fit}--\eqref{eq:predict} use the CSR assumption above. The $n$ term in prediction includes recomputing the training-response mean. The $S^2$ term also bounds the per-tree list-update contribution. Different fits have different $S$, $B_n$, and $B_q$.
+
+During construction, the code retains parent-node sample-index arrays after appending children. A working-memory bound is $O(nd+nM+M+S+B_n)$. Prediction has an analogous working-memory bound $O(qd+qM+M+S+B_q)$ in addition to the stored model. Construction's temporary node arrays are released after \code{train} returns; they are not all retained in the fitted estimator.
+
+\section{Computational Complexity of the TrIM Pipeline}
+
+\subsection{Initial forest and first EGOP estimate}
+
+For a fresh model, \code{TrIM.fit} first fits a Mondrian forest on the original training inputs. This costs $F$, with the original data geometry determining the splits.
+
+The method \code{_get_importance} then estimates a finite-difference gradient at all $n$ training samples. For each of the $d$ coordinates, it copies the full training array twice, perturbs that coordinate positively and negatively, and predicts on both arrays. Therefore, one EGOP estimate makes exactly $2d$ batch prediction calls, each containing $n$ samples.
+
+Let $G\in\mathbb{R}^{d\times n}$ contain the estimated gradients. The method \code{estimate_H_finite_diff} forms
+\begin{equation}
+\widehat H=\frac{GG^\top}{n}.
+\end{equation}
+Copying the full datasets across coordinates costs $O(nd^2)$, and forming $GG^\top$ costs $O(nd^2)$. Initially, $H$ is absent and \code{transform} returns its input without a matrix multiplication. Thus,
+\begin{equation}
+T_{\mathrm{EGOP},1}=O\bigl(nd^2+dP(n)\bigr).
+\end{equation}
+The prediction calls include all costs in Equation~\eqref{eq:predict}. In particular, the current list-based history replay contributes $O(dS^2)$ across an EGOP round.
+
+\subsection{Input transformation and subsequent iterations}
+
+Once $H$ exists, \code{transform} computes
+\begin{equation}
+X\longmapsto XA,\qquad
+A=\frac{H}{a(H)},\qquad
+a(H)=\frac1d\sum_{j=1}^{d}\lVert H_{:,j}\rVert_2.
+\end{equation}
+Normalizing $H$ costs $O(d^2)$. Multiplying $q$ input rows by this dense $d\times d$ matrix costs $O(qd^2)$ and produces $qd$ output entries. The implementation keeps all $d$ output columns; a small active-subspace dimension does not automatically make this a low-dimensional computation.
+
+During subsequent EGOP rounds, each of the $2d$ perturbed batches is independently transformed before prediction. Each transformation costs $O(nd^2)$, so together they cost $O(nd^3)$. Therefore,
+\begin{equation}
+T_{\mathrm{EGOP},\mathrm{later}}=O\bigl(nd^3+dP(n)\bigr).
+\end{equation}
+The cubic dependence here comes from repeated dense transformations, not from forming $GG^\top$. This distinction matters when identifying what could be optimized.
+
+\subsection{Number of fits and total estimator cost}
+
+For a fresh instance with \code{iteration = K} and $K\geq1$, \code{TrIM.fit} performs one initial fit, $K$ EGOP estimates, $K-1$ intermediate fits, and one final fit using the final transformation. It therefore performs $K+1$ forest fits.
+
+Let $F_j$ be the cost of forest fit $j$ and $P_j(n)$ the prediction cost for the forest used in EGOP round $j$. Using separate subscripts is necessary because transformation changes the geometry and split counts. The total cost is
+\begin{equation}
+\boxed{
+T_{\mathrm{TrIM.fit}}
+=\sum_{j=0}^{K} F_j
++O\left(Knd^2+(K-1)nd^3
++d\sum_{j=0}^{K-1}P_j(n)\right).
+}
+\end{equation}
+The $Knd^2$ term covers the first EGOP's matrix arithmetic and transformations for refitting, up to constant factors. Later EGOP arithmetic is covered by the cubic term. Final prediction on $q$ new samples adds $O(d^2+qd^2)+P_K(q)$.
+
+EGOP needs $O(nd+d^2)$ additional storage for gradient information, perturbed/transformed batches, and $H$, besides forest working memory. Prediction calls are sequential, so their peak working memory is not multiplied by $2d$.
+
+\begin{table}[htbp]
+\centering\small
+\begin{tabularx}{\textwidth}{YY Y}
+\toprule
+Stage & Execution count & Time contribution \\
+\midrule
+Initial forest fit & Once & $F_0$ \\
+First EGOP estimate & Once & $O(nd^2+dP_0(n))$ \\
+Later EGOP estimates & $K-1$ times & $O(nd^3+dP_j(n))$ per round \\
+Transforms for refitting & $K$ times & $O(nd^2)$ each \\
+Intermediate and final forest fits & $K$ times & $\sum_{j=1}^{K}F_j$ \\
+Final prediction & Once per requested batch & $O(d^2+qd^2)+P_K(q)$ \\
+\bottomrule
+\end{tabularx}
+\caption{Cost of the estimator path. $F_j$ and $P_j$ are expanded in Equations~\eqref{eq:fit}--\eqref{eq:predict}.}
+\end{table}
+
+A standalone \code{reiterate()} fits using the current $H$, then replaces $H$ with a new estimate. It does not immediately refit under the replacement $H$. The enclosing \code{TrIM.fit} supplies a final refit. Experiment helpers that use these methods manually must be counted according to their own call sequence.
+
+\subsection{Downstream lifetime evaluation and experimental repetition}
+
+The experiments often estimate $H$ manually, transform training and test inputs, and call \code{evaluate_all_lifetimes}. This function grows one forest incrementally; it does not independently train a forest at every lifetime value. For $S>0$, it records $J=\lceil S/50\rceil$ checkpoints, after split numbers $1,51,101,\ldots$.
+
+With $N=n+q$, the growth loop processes both training and test memberships, while child bounding boxes use training samples only. Its cost has the components
+\begin{equation}
+O\left(Nd+NM+Md+dB_n+B_q+Sd
++S\log(M+S)+\sum_m S_m^2\right).
+\end{equation}
+At each checkpoint it extracts one tree's training/test memberships, recomputes that tree's weights and predictions, averages the $q\times M$ stored predictions, and computes MSE. Under conservative linear-in-storage bounds for sparse operations, these checkpoints add
+\begin{equation}
+O\left(J[NM+C+n+qM]\right).
+\end{equation}
+The fixed checkpoint interval reduces the number of evaluations but does not remove their asymptotic dependence on split count.
+
+\paragraph{Implementation qualification.}
+At a checkpoint, only the tree associated with the current event is refreshed. Other trees' prediction columns retain earlier values, and the array initially contains zeros. Thus, this is not a synchronized evaluation of every tree at each recorded lifetime. There is no forced final checkpoint. If no split occurs, the function reaches an unassigned prediction variable. The successful-run cost analysis above should not be interpreted as a claim that these evaluation details implement an exact conventional lifetime sweep.
+
+The displayed ``TrIM runtime'' in \code{evaluation_comparison_with_css} covers the input transformations and downstream lifetime evaluation; its timer excludes the preceding EGOP estimation. These stage timings should not be called total TrIM training time.
+
+Experimental runtime also includes repeated work. The driver \code{rotation_main.py} estimates models for angle-distance analysis and subsequently invokes a comparison helper that estimates $H$ again. For each sample size, the weighted-CSS helper runs four reference sweeps plus two sweeps per requested CSS dimension; the direct-CSS helper runs four reference sweeps plus three per requested dimension. Additional seeds, dimensions, trials, and iteration counts multiply these workloads. Matrix-rank calculations, eigendecompositions, diagnostics, and CSS projections add further costs. The helpers report minima of test-MSE curves; they do not implement an independent validation-based selection and final-refit procedure.
+
+\section{Effect of Previous Runtime Optimizations}
+
+\subsection{Replacing a dense solve with diagonal division}
+
+For one tree, each membership row has one nonzero of size $1/\sqrt M$. Hence
+\begin{equation}
+Z^\top Z+\frac{\delta}{M}I
+=\frac1M\operatorname{diag}(n_1+\delta,\ldots,n_L+\delta).
+\end{equation}
+The general dense solve used previously costs $O(L^3)$ time and $O(L^2)$ matrix storage. The current helper computes the diagonal and right-hand side from the sparse memberships and divides elementwise. Its complete cost after column extraction is $O(n+L)$ time, rather than merely the $O(L)$ division cost.
+
+This changes the asymptotic complexity of leaf fitting, particularly where weights are recomputed repeatedly during lifetime evaluation. It does not eliminate forest construction, prediction, or sparse extraction. The formulas solve the same system algebraically; the previous report establishes exact agreement for the tested runs, not universal bitwise identity for all floating-point inputs.
+
+\subsection{Removing an unused global leaf list}
+
+After $s$ splits, the old global list contained $M+s$ entries. Updating it with a linear \code{remove} operation after every split introduced the bound
+\begin{equation}
+\sum_{s=0}^{S-1}O(M+s)=O(SM+S^2).
+\end{equation}
+Removing the unused list eliminates this contribution and its $O(M+S)$ storage. However, per-tree list removals remain, as does prediction's quadratic history replay. Therefore, eliminating this term does not guarantee a subquadratic full pipeline.
+
+\subsection{Deferring sparse reconstruction and indexing}
+
+Previously, the CSR matrix was reconstructed after every split. The current \code{train} and \code{evaluate} reconstruct once after the event loop. The lifetime sweep reconstructs only at checkpoints and also postpones training/test slices until those checkpoints.
+
+If one reconstruction costs $R$, the construction/replay contribution changes from approximately $SR$ to one reconstruction. In the sweep, the count falls from $S$ to approximately $S/50$. Since 50 is fixed, this is a constant-factor reduction in the sweep's event-count dependence. Because the constructor uses \code{copy=False}, it is not justified to assume that each reconstruction copies every nonzero; checks and dtype handling depend on SciPy. The reduced call counts are established by the code, while the exact per-call cost requires library inspection or profiling.
+
+\begin{table}[htbp]
+\centering\small
+\begin{tabularx}{\textwidth}{YYY}
+\toprule
+Optimization & Removed or reduced work & Remaining limitation \\
+\midrule
+Diagonal division & $O(L^3)$ dense solve becomes $O(n+L)$ after extraction & Sparse extraction and tree operations remain. \\
+Unused global list & Removes $O(SM+S^2)$ bookkeeping & Per-tree lists and history replay remain. \\
+Deferred sparse operations & Once after growth/replay; approximately 50 times fewer sweep calls & Checkpoint work still grows with $S$. \\
+\bottomrule
+\end{tabularx}
+\caption{The optimizations simplify equivalent computations; their effects on the full runtime depend on which remaining term dominates.}
+\end{table}
+
+\subsection{Previously measured improvements}
+
+The previous report used rotated data with $d=30$, two active directions, $M=30$, and $\lambda=5$. Table~\ref{tab:timings} reproduces its original and fully optimized timings. Intermediate results show that diagonal division alone reduced downstream times to 42.22 and 178.23 seconds. After removing the global list, these became 10.58 and 27.49 seconds; deferring sparse work then reduced them to the final values below.
+
+\begin{table}[htbp]
+\centering\small
+\begin{tabular}{lrrrr}
+\toprule
+Stage & $n$ & Original (s) & Optimized (s) & Speedup \\
+\midrule
+EGOP estimation & 3200 & 1847.70 & 158.00 & $11.7\times$ \\
+EGOP estimation & 6400 & 7458.63 & 499.32 & $14.9\times$ \\
+Downstream TrIM & 3200 & 295.45 & 8.02 & $36.8\times$ \\
+Downstream TrIM & 6400 & 1641.97 & 22.38 & $73.4\times$ \\
+\bottomrule
+\end{tabular}
+\caption{Measurements from the previous optimization report, not new benchmarks. Stage labels follow that report.}\label{tab:timings}
+\end{table}
+
+All recorded MSE values and EGOP angle distances were unchanged in those comparisons. These results demonstrate substantial improvement for the tested configuration, but two sample sizes do not establish a general runtime scaling law.
+
+\section{Remaining Computational Bottlenecks}
+
+\subsection{Algorithmic work versus implementation overhead}
+
+Under the current finite-difference algorithm, each EGOP estimate still needs gradient information for all coordinates, and the implementation obtains it using $2d$ prediction batches. Forming a full $d\times d$ EGOP also requires $d^2$ output storage. Forest construction must route samples and compute the quantities used to sample its cuts. These are central computations in the current pipeline.
+
+Other costs arise from implementation choices rather than from the forest estimator itself. These include front removal from a Python history list, repeated dense transformations of closely related perturbations, separate CSR column extraction for every tree, retaining parent sample-index arrays during construction, and maintaining per-tree leaves with linear list removal. The exact current implementation pays these costs, but equivalent estimators need not use these data structures.
+
+\subsection{Why higher dimension is expensive}
+
+Dimension has several separate effects. Bounding-box computation scans all coordinates. A finite-difference EGOP makes $2d$ predictions. Forming $H$ costs $O(nd^2)$, and applying a full transformation costs $O(nd^2)$. Later EGOP rounds repeat this transformation across coordinates, producing the $O(nd^3)$ contribution. Added nonconstant coordinates can also increase split rates, indirectly increasing the split counts used in the forest cost formulas.
+
+The repeated transformation cost is a concrete optimization opportunity. For fixed $A=H/a(H)$,
+\begin{equation}
+\left(X\pm\frac h2\mathbf{1}e_j^\top\right)A
+=XA\pm\frac h2\mathbf{1}A_{j,:}.
+\end{equation}
+Thus, one could compute $XA$ once and construct transformed perturbations using row-vector adjustments. This can reduce the repeated transformation arithmetic toward $O(nd^2)$ across the coordinate sweep. It is a proposed change, not an implemented or benchmarked result; floating-point differences would need validation.
+
+\subsection{Expected effects of increasing problem size}
+
+\begin{table}[htbp]
+\centering\small
+\begin{tabularx}{\textwidth}{lY}
+\toprule
+Parameter & Consequences for runtime \\
+\midrule
+$n$ & More copying, matrix arithmetic, and membership storage; potentially more splits and sample participation. No universal linear scaling follows. \\
+$d$ & More coordinate scans and EGOP predictions; quadratic dense arithmetic, and cubic repeated transformation arithmetic in later EGOP rounds. \\
+$M$ & More trees and memberships. Expected split count is linear in $M$ at fixed data and tree parameters, but shared-history replay and sparse indexing can produce superlinear runtime. \\
+$\lambda$ & Allows more split events and checkpoints until training-data growth saturates; runtime need not be linear in lifetime. \\
+$K$ & Repeats fitting and EGOP estimation; later rounds incur transformed-perturbation costs absent in the first round. \\
+\bottomrule
+\end{tabularx}
+\caption{Scaling mechanisms established by the implementation. Their relative importance requires measurement.}
+\end{table}
+
+\subsection{When EGOP or downstream regression dominates}
+
+The previous timings show EGOP estimation taking much longer than the displayed downstream TrIM run in the tested configuration. Repeated prediction calls provide a code-based explanation for why this is plausible. They do not prove which internal operation accounts for most of the EGOP time.
+
+EGOP is especially likely to dominate when $d$ or $K$ is large, or when prediction histories contain many splits. Downstream work can dominate with a much larger test set, more downstream trees, a larger downstream lifetime, or many separate comparison sweeps. Because transformation changes the data ranges, the downstream forest can have a different split count from the forest used for EGOP estimation.
+
+\paragraph{Profiling needed to resolve dominance.}
+Useful measurements would separate history-list operations, sample routing, bounding-box calculations, sparse extraction, transformations, and $GG^\top$. They should also record exact split counts, checkpoint counts, and sample participation. Any timing study should distinguish initial EGOP, later EGOP rounds, and downstream evaluation, and should vary one parameter at a time. These experiments have not been run for this report.
+
+\section{Conclusion}
+
+The previous optimizations remove expensive computations without changing the recorded experimental results. They eliminate a cubic leaf solve, an unused quadratic bookkeeping contribution, and many unnecessary sparse operations. However, they do not remove the repeated forest predictions required by the current EGOP procedure.
+
+The most important remaining implementation costs are quadratic list-based history replay, repeated dense transformations in later EGOP rounds, sparse column extraction, and repeated bounding-box scans. The first two are particularly relevant because EGOP repeats prediction and transformation across all coordinates. The total cost also depends on tree growth and experimental repetition, so it cannot be represented accurately by a single textbook forest complexity bound.
+
+For the configuration already benchmarked, EGOP estimation remains the larger reported stage. Profiling the identified operations is the next step needed to determine which additional change would provide the greatest practical improvement.
+
+\appendix
+\section{Source locations used in this analysis}
+All paths below are relative to \code{estimatedH_CSS/src/}. Line numbers refer to the source inspected for this report.
+\begin{table}[htbp]
+\centering\footnotesize
+\begin{tabularx}{\textwidth}{YlY}
+\toprule
+File & Lines & Functions or behavior \\
+\midrule
+\code{Mondrian_RF/Mondrian_forest.py} & 32--39 & Forest fit and prediction wrappers. \\
+Same file & 83--108 & Finite differences and EGOP matrix multiplication. \\
+Same file & 110--136 & TrIM fit, reiteration, transformation, and prediction. \\
+Same file & 165--170 & Diagonal weighted EGOP; transformation remains inherited. \\
+\code{Mondrian_RF/utils.py} & 8--33 & Diagonal leaf-weight calculation. \\
+Same file & 36--130 & Forest construction, heap, bounding boxes, sparse extraction. \\
+Same file & 132--184 & History replay, front removal, and prediction aggregation. \\
+Same file & 188--207 & Cut sampling and transformation normalization. \\
+Same file & 209--325 & Lifetime growth, checkpoints, and recorded test errors. \\
+\code{utils.py} & 136--145, 185--189 & Repeated fits and reiterations across simulations. \\
+\code{rotation_main.py} & 117--164 & Angle-distance models followed by comparison evaluation. \\
+\code{css_utils_trueH.py} & 416--575 & Reference methods, EGOP fitting, downstream timer, CSS sweeps. \\
+\code{css_utils_direct.py} & 230--390 & Direct-CSS comparison and repeated downstream sweeps. \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\begin{thebibliography}{1}
+\bibitem{optimization}
+Nina Li. \emph{Runtime Optimizations for the Mondrian Forest Implementation}. July 12, 2026. Local file: \code{related paper/Runtime Optimization for Mondrian Forest.pdf}.
+\end{thebibliography}
+\end{document}

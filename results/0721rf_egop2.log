@@ -1,0 +1,120 @@
+STEP_SIZE (RF surrogate) = 1.0
+ORACLE_H (true-f FD step) = 0.001
+LIFETIME = 5
+DIM_LIST = [5, 10, 15, 20, 30, 50, 100]
+ACTIVE = 2
+N_ITERATIONS (max K) = 6
+FUN_STR = poly
+ROTATION_MODE = orth
+EGOP backend = rf (forced)
+N_ESTIMATORS (trees) = 30
+
+=======================================================
+d = 5
+=======================================================
+Oracle (FD on true f, near-exact grad): angle distance = 0.005639
+Training the Mondrian Forests:
+  0%|          | 0/1 [00:00<?, ?it/s]100%|██████████| 1/1 [00:00<00:00,  3.13it/s]100%|██████████| 1/1 [00:00<00:00,  3.13it/s]
+  0%|          | 0/1 [00:00<?, ?it/s]100%|██████████| 1/1 [00:00<00:00,  2.54it/s]100%|██████████| 1/1 [00:00<00:00,  2.54it/s]
+RF surrogate EGOP (angle distance, lower=better):
+    K=1  n=3200: 0.127620   n=6400: 0.106314   
+    K=2  n=3200: 0.101382   n=6400: 0.087230   
+    K=3  n=3200: 0.116591   n=6400: 0.095819   
+    K=4  n=3200: 0.130862   n=6400: 0.103680   
+    K=5  n=3200: 0.144578   n=6400: 0.112335   
+    K=6  n=3200: 0.158887   n=6400: 0.121725   
+
+=======================================================
+d = 10
+=======================================================
+Oracle (FD on true f, near-exact grad): angle distance = 0.006923
+Training the Mondrian Forests:
+  0%|          | 0/1 [00:00<?, ?it/s]100%|██████████| 1/1 [00:00<00:00,  1.81it/s]100%|██████████| 1/1 [00:00<00:00,  1.81it/s]
+  0%|          | 0/1 [00:00<?, ?it/s]100%|██████████| 1/1 [00:00<00:00,  1.63it/s]100%|██████████| 1/1 [00:00<00:00,  1.62it/s]
+RF surrogate EGOP (angle distance, lower=better):
+    K=1  n=3200: 0.651573   n=6400: 0.480427   
+    K=2  n=3200: 0.283935   n=6400: 0.226600   
+    K=3  n=3200: 0.258215   n=6400: 0.205142   
+    K=4  n=3200: 0.240880   n=6400: 0.209343   
+    K=5  n=3200: 0.240847   n=6400: 0.214887   
+    K=6  n=3200: 0.244001   n=6400: 0.220195   
+
+=======================================================
+d = 15
+=======================================================
+Oracle (FD on true f, near-exact grad): angle distance = 0.007997
+Training the Mondrian Forests:
+  0%|          | 0/1 [00:00<?, ?it/s]100%|██████████| 1/1 [00:00<00:00,  1.30it/s]100%|██████████| 1/1 [00:00<00:00,  1.30it/s]
+  0%|          | 0/1 [00:00<?, ?it/s]100%|██████████| 1/1 [00:00<00:00,  1.10it/s]100%|██████████| 1/1 [00:00<00:00,  1.10it/s]
+RF surrogate EGOP (angle distance, lower=better):
+    K=1  n=3200: 0.392596   n=6400: 0.331612   
+    K=2  n=3200: 0.224442   n=6400: 0.173097   
+    K=3  n=3200: 0.204558   n=6400: 0.155157   
+    K=4  n=3200: 0.199341   n=6400: 0.152008   
+    K=5  n=3200: 0.199450   n=6400: 0.151785   
+    K=6  n=3200: 0.207351   n=6400: 0.157207   
+
+=======================================================
+d = 20
+=======================================================
+Oracle (FD on true f, near-exact grad): angle distance = 0.005567
+Training the Mondrian Forests:
+  0%|          | 0/1 [00:00<?, ?it/s]100%|██████████| 1/1 [00:00<00:00,  1.02it/s]100%|██████████| 1/1 [00:00<00:00,  1.01it/s]
+  0%|          | 0/1 [00:00<?, ?it/s]100%|██████████| 1/1 [00:01<00:00,  1.22s/it]100%|██████████| 1/1 [00:01<00:00,  1.22s/it]
+RF surrogate EGOP (angle distance, lower=better):
+    K=1  n=3200: 1.493885   n=6400: 1.261573   
+    K=2  n=3200: 0.461780   n=6400: 0.313477   
+    K=3  n=3200: 0.334139   n=6400: 0.260803   
+    K=4  n=3200: 0.316068   n=6400: 0.244901   
+    K=5  n=3200: 0.315505   n=6400: 0.238042   
+    K=6  n=3200: 0.308589   n=6400: 0.235922   
+
+=======================================================
+d = 30
+=======================================================
+Oracle (FD on true f, near-exact grad): angle distance = 0.010617
+Training the Mondrian Forests:
+  0%|          | 0/1 [00:00<?, ?it/s]100%|██████████| 1/1 [00:01<00:00,  1.48s/it]100%|██████████| 1/1 [00:01<00:00,  1.48s/it]
+  0%|          | 0/1 [00:00<?, ?it/s]100%|██████████| 1/1 [00:01<00:00,  1.95s/it]100%|██████████| 1/1 [00:01<00:00,  1.95s/it]
+RF surrogate EGOP (angle distance, lower=better):
+    K=1  n=3200: 1.428366   n=6400: 1.428141   
+    K=2  n=3200: 0.962867   n=6400: 0.473116   
+    K=3  n=3200: 0.600994   n=6400: 0.312985   
+    K=4  n=3200: 0.555258   n=6400: 0.308482   
+    K=5  n=3200: 0.555032   n=6400: 0.320891   
+    K=6  n=3200: 0.561436   n=6400: 0.329672   
+
+=======================================================
+d = 50
+=======================================================
+2026-07-21 02:30:25.778068: W external/xla/xla/service/gpu/autotuning/dot_search_space.cc:200] All configs were filtered out because none of them sufficiently match the hints. Maybe the hints set does not contain a good representative set of valid configs?Working around this by using the full hints set instead.
+2026-07-21 02:30:26.374889: W external/xla/xla/service/gpu/autotuning/dot_search_space.cc:200] All configs were filtered out because none of them sufficiently match the hints. Maybe the hints set does not contain a good representative set of valid configs?Working around this by using the full hints set instead.
+2026-07-21 02:30:27.438833: W external/xla/xla/service/gpu/autotuning/dot_search_space.cc:200] All configs were filtered out because none of them sufficiently match the hints. Maybe the hints set does not contain a good representative set of valid configs?Working around this by using the full hints set instead.
+Oracle (FD on true f, near-exact grad): angle distance = 0.004517
+Training the Mondrian Forests:
+  0%|          | 0/1 [00:00<?, ?it/s]100%|██████████| 1/1 [00:02<00:00,  2.45s/it]100%|██████████| 1/1 [00:02<00:00,  2.45s/it]
+  0%|          | 0/1 [00:00<?, ?it/s]100%|██████████| 1/1 [00:03<00:00,  3.35s/it]100%|██████████| 1/1 [00:03<00:00,  3.35s/it]
+RF surrogate EGOP (angle distance, lower=better):
+    K=1  n=3200: 1.548337   n=6400: 1.370366   
+    K=2  n=3200: 1.475974   n=6400: 1.403100   
+    K=3  n=3200: 1.402796   n=6400: 1.446507   
+    K=4  n=3200: 1.488064   n=6400: 1.279384   
+    K=5  n=3200: 1.570030   n=6400: 1.227959   
+    K=6  n=3200: 1.552853   n=6400: 1.310777   
+
+=======================================================
+d = 100
+=======================================================
+Oracle (FD on true f, near-exact grad): angle distance = 0.006487
+Training the Mondrian Forests:
+  0%|          | 0/1 [00:00<?, ?it/s]100%|██████████| 1/1 [00:05<00:00,  5.07s/it]100%|██████████| 1/1 [00:05<00:00,  5.07s/it]
+  0%|          | 0/1 [00:00<?, ?it/s]100%|██████████| 1/1 [00:07<00:00,  7.28s/it]100%|██████████| 1/1 [00:07<00:00,  7.28s/it]
+RF surrogate EGOP (angle distance, lower=better):
+    K=1  n=3200: 1.564124   n=6400: 1.553885   
+    K=2  n=3200: 1.549935   n=6400: 1.540169   
+    K=3  n=3200: 1.558342   n=6400: 1.519999   
+    K=4  n=3200: 1.471167   n=6400: 1.539556   
+    K=5  n=3200: 1.462895   n=6400: 1.551870   
+    K=6  n=3200: 1.458372   n=6400: 1.565245   
+
+Done.

@@ -1,0 +1,43 @@
+
+========================================================================
+run started 2026-09-27 16:09:19
+========================================================================
+Experiment B (full): iterative sweep + oracle floor
+  EGOP_BACKEND  = mondrian (forced)
+  D_LIST        = [45, 40, 35, 30, 20, 10]
+  SEEDS         = [0]
+  N_ITERATIONS  = 4
+  RUN_ORACLE    = True
+  ACTIVE        = 2
+  LIFETIME      = 5
+  N_ESTIMATORS  = 30
+  FUN_STR       = poly
+  ROTATION_MODE = None
+  N_TEST        = 3200
+  d=45: n=[3200, 6400, 12800], step_size=1.0000
+  d=40: n=[3200, 6400, 12800], step_size=1.0000
+  d=35: n=[3200, 6400, 12800], step_size=1.0000
+  d=30: n=[3200, 6400, 12800], step_size=1.0000
+  d=20: n=[3200, 6400, 12800], step_size=1.0000
+  d=10: n=[3200, 6400, 12800], step_size=1.0000
+
+
+[d=45] seed=0  (n_max=12800, h=1.0000)
+2026-09-27 16:09:19.734624: W external/xla/xla/service/gpu/autotuning/dot_search_space.cc:200] All configs were filtered out because none of them sufficiently match the hints. Maybe the hints set does not contain a good representative set of valid configs?Working around this by using the full hints set instead.
+2026-09-27 16:09:20.691081: W external/xla/xla/service/gpu/autotuning/dot_search_space.cc:200] All configs were filtered out because none of them sufficiently match the hints. Maybe the hints set does not contain a good representative set of valid configs?Working around this by using the full hints set instead.
+2026-09-27 16:09:21.946708: W external/xla/xla/service/gpu/autotuning/dot_search_space.cc:200] All configs were filtered out because none of them sufficiently match the hints. Maybe the hints set does not contain a good representative set of valid configs?Working around this by using the full hints set instead.
+Training the Mondrian Forests:
+
+  0%|          | 0/1 [00:00<?, ?it/s]
+100%|██████████| 1/1 [03:55<00:00, 235.27s/it]
+100%|██████████| 1/1 [03:55<00:00, 235.27s/it]
+
+  0%|          | 0/1 [00:00<?, ?it/s]
+100%|██████████| 1/1 [12:20<00:00, 740.47s/it]
+100%|██████████| 1/1 [12:20<00:00, 740.47s/it]
+
+  0%|          | 0/1 [00:00<?, ?it/s]
+100%|██████████| 1/1 [44:02<00:00, 2642.17s/it]
+100%|██████████| 1/1 [44:02<00:00, 2642.17s/it]
+    iter 1  (  3617.9s): n=3200:0.9867  n=6400:0.2331  n=12800:0.2062
+    iter 2  (  3899.6s): n=3200:0.6452  n=6400:0.3703  n=12800:0.2201

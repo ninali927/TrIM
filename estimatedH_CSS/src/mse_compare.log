@@ -1,0 +1,29 @@
+run started 2026-09-27 21:41:12
+  D_LIST=[10, 30]  N_LIST=[3200, 12800]  rotations=['aligned', 'rotated']
+  trees=30  lifetime=5  RF bootstrap=False max_features=1.0
+
+[aligned d= 10 n=  3200]  RF mse=0.001973 (   0.8s)   Mondrian mse=0.07949 (    7.3s)
+[rotated d= 10 n=  3200]  RF mse=0.7732 (   0.8s)   Mondrian mse=0.6177 (    7.3s)
+[aligned d= 30 n=  3200]  RF mse=0.002658 (   1.2s)   Mondrian mse=0.1244 (    7.4s)
+[rotated d= 30 n=  3200]  RF mse=1.708 (   1.3s)   Mondrian mse=1.622 (    7.4s)
+[aligned d= 10 n= 12800]  RF mse=0.0005979 (   1.5s)   Mondrian mse=0.06394 (   60.1s)
+[rotated d= 10 n= 12800]  RF mse=0.6902 (   1.7s)   Mondrian mse=0.4885 (   59.5s)
+[aligned d= 30 n= 12800]  RF mse=0.0006849 (   3.4s)   Mondrian mse=0.1156 (   59.9s)
+[rotated d= 30 n= 12800]  RF mse=1.697 (   3.8s)   Mondrian mse=1.576 (   60.1s)
+
+==============================================================================
+Best test MSE over the complexity sweep (no transform)
+==============================================================================
+    data    d      n    Mondrian          RF   RF/Mond    rel M   rel RF    sec M   sec RF
+ aligned   10   3200     0.07949    0.001973      0.02    0.554    0.014      7.3      0.8
+ aligned   10  12800     0.06394   0.0005979      0.01    0.446    0.004     60.1      1.5
+ aligned   30   3200      0.1244    0.002658      0.02    0.892    0.019      7.4      1.2
+ aligned   30  12800      0.1156   0.0006849      0.01    0.829    0.005     59.9      3.4
+ rotated   10   3200      0.6177      0.7732      1.25    0.591    0.740      7.3      0.8
+ rotated   10  12800      0.4885      0.6902      1.41    0.467    0.661     59.5      1.7
+ rotated   30   3200       1.622       1.708      1.05    0.950    1.000      7.4      1.3
+ rotated   30  12800       1.576       1.697      1.08    0.923    0.994     60.1      3.8
+
+  RF/Mond < 1 -> RF fits better;  > 1 -> Mondrian fits better
+
+Done. results/mse_compare/mse_compare.csv

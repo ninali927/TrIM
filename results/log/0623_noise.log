@@ -1,0 +1,30 @@
+STEP_SIZE = 3.0
+LIFETIME = 5
+DIM_IN = 30
+ACTIVE = 2
+ROTATION_MODE = orth
+N_SAMPLE = 6400
+NOISE_K = 4
+EPS_GRID = [0.0, 0.2, 0.4, 0.6, 0.8, 1.0]
+N_NOISE_SEEDS = 5
+=== noise sweep: n_sample=6400, k=4, seeds=5, eps in [0.0, 1.0] (6 pts) ===
+  reference  Full(true_H) best MSE = 5.839506e-02 (runtime 689.036s)
+  reference  CSS(true_H)  best MSE = 8.257534e-02 (effective k=4, runtime 20.336s)
+  real estimated H: rel_err=0.9888, angle_distance=0.4600
+eps grid:   0%|          | 0/6 [00:00<?, ?it/s]  eps=0.000 (measured rel_err=0.000): CSS mse=8.6661e-02 rt=21.000s  | Full mse=6.7226e-02 rt=673.277s
+eps grid:  17%|█▋        | 1/6 [57:51<4:49:16, 3471.39s/it]  eps=0.200 (measured rel_err=0.200): CSS mse=2.1577e-01 rt=28.781s  | Full mse=1.0515e-01 rt=1545.943s
+eps grid:  33%|███▎      | 2/6 [3:09:05<6:44:03, 6060.94s/it]  eps=0.400 (measured rel_err=0.400): CSS mse=5.2511e-01 rt=34.513s  | Full mse=2.3179e-01 rt=1525.246s
+eps grid:  50%|█████     | 3/6 [5:19:03<5:42:43, 6854.49s/it]  eps=0.600 (measured rel_err=0.600): CSS mse=8.0496e-01 rt=51.156s  | Full mse=3.7962e-01 rt=1535.808s
+eps grid:  67%|██████▋   | 4/6 [7:31:18<4:02:41, 7280.99s/it]  eps=0.800 (measured rel_err=0.800): CSS mse=1.0432e+00 rt=48.853s  | Full mse=5.5809e-01 rt=1535.485s
+eps grid:  83%|████████▎ | 5/6 [9:43:20<2:05:12, 7512.03s/it]  eps=1.000 (measured rel_err=1.000): CSS mse=1.2039e+00 rt=61.862s  | Full mse=6.8885e-01 rt=1531.260s
+eps grid: 100%|██████████| 6/6 [11:56:05<00:00, 7666.25s/it] eps grid: 100%|██████████| 6/6 [11:56:05<00:00, 7160.99s/it]
+  no crossover within the eps grid (CSS stays below Full throughout, or above throughout)
+  figure -> results/orth_poly_d30_Nesti30_noise_k4_n6400.png
+
+=== summary ===
+  CSS(true_H) ref best MSE : 8.257534e-02
+  Full(true_H) ref best MSE: 5.839506e-02
+  real est. H: rel_err=0.9888, angle=0.4600
+  crossover eps: None
+
+Done. Figure is in 'results/'.

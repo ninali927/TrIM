@@ -1,0 +1,71 @@
+
+========================================================================
+run started 2026-09-20 00:05:02
+========================================================================
+Experiment B (full): iterative sweep + oracle floor
+  EGOP_BACKEND  = mondrian (forced)
+  D_LIST        = [50, 60, 75, 90, 100]
+  SEEDS         = [23]
+  N_ITERATIONS  = 5
+  RUN_ORACLE    = True
+  ACTIVE        = 2
+  LIFETIME      = 5
+  N_ESTIMATORS  = 30
+  FUN_STR       = poly
+  ROTATION_MODE = orth
+  N_TEST        = 3200
+  d=50: n=[1600, 3200, 6400, 12800], step_size=1.0000
+  d=60: n=[1600, 3200, 6400, 12800], step_size=1.0000
+  d=75: n=[1600, 3200, 6400, 12800], step_size=1.0000
+  d=90: n=[1600, 3200, 6400, 12800], step_size=1.0000
+  d=100: n=[1600, 3200, 6400, 12800], step_size=1.0000
+
+
+[d=50] seed=23  (n_max=12800, h=1.0000)
+2026-09-20 00:05:03.691662: W external/xla/xla/service/gpu/autotuning/dot_search_space.cc:200] All configs were filtered out because none of them sufficiently match the hints. Maybe the hints set does not contain a good representative set of valid configs?Working around this by using the full hints set instead.
+2026-09-20 00:05:04.861943: W external/xla/xla/service/gpu/autotuning/dot_search_space.cc:200] All configs were filtered out because none of them sufficiently match the hints. Maybe the hints set does not contain a good representative set of valid configs?Working around this by using the full hints set instead.
+Training the Mondrian Forests:
+  0%|          | 0/1 [00:00<?, ?it/s]100%|██████████| 1/1 [01:34<00:00, 94.88s/it]100%|██████████| 1/1 [01:34<00:00, 94.88s/it]
+  0%|          | 0/1 [00:00<?, ?it/s]100%|██████████| 1/1 [04:18<00:00, 258.17s/it]100%|██████████| 1/1 [04:18<00:00, 258.17s/it]
+  0%|          | 0/1 [00:00<?, ?it/s]100%|██████████| 1/1 [13:39<00:00, 819.85s/it]100%|██████████| 1/1 [13:39<00:00, 819.85s/it]
+  0%|          | 0/1 [00:00<?, ?it/s]100%|██████████| 1/1 [48:19<00:00, 2899.51s/it]100%|██████████| 1/1 [48:19<00:00, 2899.51s/it]
+    iter 1  (  4072.5s): n=1600:1.2716  n=3200:1.2677  n=6400:1.3078  n=12800:1.0704
+    iter 2  (  4419.3s): n=1600:1.2878  n=3200:1.3542  n=6400:0.9376  n=12800:0.6152
+    iter 3  (  4604.1s): n=1600:1.2288  n=3200:1.3852  n=6400:0.7364  n=12800:0.5641
+    iter 4  (  4492.4s): n=1600:1.2054  n=3200:1.3713  n=6400:0.6802  n=12800:0.5517
+    iter 5  (  4592.7s): n=1600:1.2345  n=3200:1.3659  n=6400:0.6691  n=12800:0.5549
+2026-09-20 06:16:16.246382: W external/xla/xla/service/gpu/autotuning/dot_search_space.cc:200] All configs were filtered out because none of them sufficiently match the hints. Maybe the hints set does not contain a good representative set of valid configs?Working around this by using the full hints set instead.
+2026-09-20 06:16:17.197427: W external/xla/xla/service/gpu/autotuning/dot_search_space.cc:200] All configs were filtered out because none of them sufficiently match the hints. Maybe the hints set does not contain a good representative set of valid configs?Working around this by using the full hints set instead.
+2026-09-20 06:29:20.692851: W external/xla/xla/service/gpu/autotuning/dot_search_space.cc:200] All configs were filtered out because none of them sufficiently match the hints. Maybe the hints set does not contain a good representative set of valid configs?Working around this by using the full hints set instead.
+2026-09-20 06:29:21.661567: W external/xla/xla/service/gpu/autotuning/dot_search_space.cc:200] All configs were filtered out because none of them sufficiently match the hints. Maybe the hints set does not contain a good representative set of valid configs?Working around this by using the full hints set instead.
+    oracle          : n=1600:0.0328  n=3200:0.0188  n=6400:0.0162  n=12800:0.0129
+    metric noise floor (analytic, true value 0): 4.88e-04
+
+[d=60] seed=23  (n_max=12800, h=1.0000)
+2026-09-20 06:55:44.619894: W external/xla/xla/service/gpu/autotuning/dot_search_space.cc:200] All configs were filtered out because none of them sufficiently match the hints. Maybe the hints set does not contain a good representative set of valid configs?Working around this by using the full hints set instead.
+2026-09-20 06:55:45.449091: W external/xla/xla/service/gpu/autotuning/dot_search_space.cc:200] All configs were filtered out because none of them sufficiently match the hints. Maybe the hints set does not contain a good representative set of valid configs?Working around this by using the full hints set instead.
+Training the Mondrian Forests:
+  0%|          | 0/1 [00:00<?, ?it/s]100%|██████████| 1/1 [01:52<00:00, 112.68s/it]100%|██████████| 1/1 [01:52<00:00, 112.68s/it]
+  0%|          | 0/1 [00:00<?, ?it/s]100%|██████████| 1/1 [05:04<00:00, 304.97s/it]100%|██████████| 1/1 [05:04<00:00, 304.97s/it]
+  0%|          | 0/1 [00:00<?, ?it/s]100%|██████████| 1/1 [15:47<00:00, 947.93s/it]100%|██████████| 1/1 [15:47<00:00, 947.93s/it]
+  0%|          | 0/1 [00:00<?, ?it/s]100%|██████████| 1/1 [57:16<00:00, 3436.53s/it]100%|██████████| 1/1 [57:16<00:00, 3436.53s/it]
+    iter 1  (  4802.1s): n=1600:1.3816  n=3200:1.3307  n=6400:1.2344  n=12800:1.0840
+    iter 2  (  5234.8s): n=1600:1.4027  n=3200:1.1440  n=6400:0.8522  n=12800:0.8671
+    iter 3  (  5482.7s): n=1600:1.3929  n=3200:1.1412  n=6400:0.7778  n=12800:0.7336
+    iter 4  (  5376.5s): n=1600:1.3911  n=3200:1.1360  n=6400:0.7727  n=12800:0.6636
+Traceback (most recent call last):
+  File "/home/ninali/TrIM_project/estimatedH_CSS/src/0919_exp.py", line 233, in <module>
+    sim.reiterate()
+  File "/home/ninali/TrIM_project/estimatedH_CSS/src/utils.py", line 188, in reiterate
+    self.forests[n_sim][trial].reiterate()
+  File "/home/ninali/TrIM_project/estimatedH_CSS/src/Mondrian_RF/Mondrian_forest.py", line 227, in reiterate
+    self.H = self.estimate_H_finite_diff()
+  File "/home/ninali/TrIM_project/estimatedH_CSS/src/Mondrian_RF/Mondrian_forest.py", line 208, in estimate_H_finite_diff
+    importance = self._get_importance()
+  File "/home/ninali/TrIM_project/estimatedH_CSS/src/Mondrian_RF/Mondrian_forest.py", line 194, in _get_importance
+    y_eval_pos = self.mf.predict(self.transform(x_eval_pos))
+  File "/home/ninali/TrIM_project/estimatedH_CSS/src/Mondrian_RF/Mondrian_forest.py", line 55, in predict
+    return evaluate(self.y, X, self.n_estimators, self.history, self.w_trees)
+  File "/home/ninali/TrIM_project/estimatedH_CSS/src/Mondrian_RF/utils.py", line 155, in evaluate
+    (birth_time, m, c, dim, loc) = history.pop(0)
+KeyboardInterrupt

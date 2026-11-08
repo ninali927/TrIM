@@ -1,0 +1,402 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb,booktabs,tabularx,array}
+\usepackage[hidelinks]{hyperref}
+\newcolumntype{Y}{>{\raggedright\arraybackslash}X}
+\newcommand{\code}[1]{\texttt{\detokenize{#1}}}
+\title{Computational Complexity of TrIM: A Six-Step Analysis}
+\author{Nina Li}
+\date{}
+\begin{document}
+\maketitle
+
+\noindent This note follows the current Mondrian-based implementation in
+\code{estimatedH_CSS/src/}. The main analysis covers one initial EGOP estimate,
+followed by downstream regression. Additional iterations and the experimental
+lifetime sweep are identified separately. No experiments were run.
+
+\paragraph{Notation.}
+All time bounds refer to the current implementation, using conventional dense
+arithmetic costs. The symbols below are used throughout.
+\begin{center}
+\small
+\begin{tabularx}{\textwidth}{lY}
+\toprule
+Symbol & Definition \\
+\midrule
+$n$ & Number of training samples. \\
+$q$ & Number of test samples. \\
+$d$ & Number of input coordinates; the full TrIM transform retains $d$ columns. \\
+$M$ & Number of Mondrian trees in a forest. \\
+$\lambda$ & Maximum lifetime, which determines which sampled split events occur. \\
+$m$, $e$ & Tree index and processed split-event index, respectively. \\
+$S_m$, $S$ & Splits in tree $m$ and total forest splits, $S=\sum_{m=1}^{M}S_m$. \\
+$L_m$, $C$ & Active leaves in tree $m$, $L_m=1+S_m$; total node-column count $C=M+2S$. \\
+$n_e$ & Number of training samples in the node processed at split $e$. \\
+$B$ & Training-sample participation across splits: $B=\sum_{e=1}^{S}n_e$. \\
+$t$, $B_{f,t}$ & Number of samples in a prediction batch, and their total participation across replayed splits in forest $f$. In particular, $B_{1,q}$ refers to the downstream forest's test batch. \\
+$F$, $P(t)$ & Time for one forest fit and one batch prediction, expanded below. \\
+$f$ & Forest label: $f=0$ for the initial forest and $f=1$ for the downstream forest. A subscript $f$ attaches split counts and costs to that forest. \\
+$N$, $J$, $W$ & Total samples $N=n+q$; checkpoint count $J=\lceil S_1/50\rceil$ for $S_1>0$; combined downstream lifetime-sweep time $W$. \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\section{Train the Initial Forest}
+
+\code{MondrianForestRegressor.fit} calls \code{train} in
+\code{Mondrian_RF/utils.py}. The operations below describe one forest fit on
+the original training inputs and responses; each time bound covers all trees
+unless stated otherwise.
+
+\subsection*{1.1 Initialize data and memberships}
+The code copies the inputs, centers the responses, and computes the initial
+coordinate bounds shared by all trees. It also records that every sample
+initially belongs to each tree's root.
+\[
+\text{Time: }O(nd+nM).
+\]
+Here $n$ is the number of training samples, $d$ is the number of coordinates,
+and $M$ is the number of trees. Scanning and copying inputs costs $O(nd)$;
+initializing one membership per sample per tree costs $O(nM)$.
+
+\subsection*{1.2 Sample and schedule cuts}
+The code samples root cuts and two child candidates per processed split,
+using coordinate ranges to choose their times and locations. A heap processes
+accepted events in time order, before the maximum lifetime is reached.
+\[
+\text{Time: }O\bigl(Md+Sd+(M+S)\log(1+M+S)\bigr).
+\]
+Here $M$ is the number of trees, $d$ is the number of coordinates, and $S$ is
+the total processed split count across the forest. Root sampling costs $O(Md)$,
+child sampling costs $O(Sd)$, and the remaining term bounds heap operations.
+Root sampling is performed even for trees whose first candidate is rejected.
+
+\subsection*{1.3 Split nodes and update records}
+Each split partitions its samples, updates memberships, and recomputes child
+bounds. The code also removes the parent from its tree's active-leaf list
+and appends the children; Python list removal has linear cost.
+\[
+\text{Time: }O\!\left(dB+S+\sum_{m=1}^{M}S_m^2\right),
+\qquad B=\sum_{e=1}^{S}n_e.
+\]
+Here $d$ is the coordinate count, $M$ is the tree count, $m$ indexes trees,
+$S_m$ is the number of splits in tree $m$, and $S=\sum_m S_m$.
+The index $e$ identifies a processed split, $n_e$ is its node's training-sample
+count, and $B$ is total sample participation across splits. The $dB$ term
+covers coordinate scans; the remaining terms bound active-list maintenance.
+
+\emph{Tree shape and lifetime.} With $n$ training samples and $M$ trees,
+balanced growth gives $B=O(Mn\log n)$; an unbalanced-tree upper bound is
+$O(Mn^2)$. Balanced growth is not guaranteed. Assuming nonempty children,
+$S\leq M(n-1)$ and $B\geq2S$, so the $Sd$ sampling term in Step 1.2 is absorbed
+by $dB$ in the total bound. Maximum lifetime $\lambda$ changes which splits
+occur, and hence $S$ and $B$, rather than introducing a universal linear
+runtime factor in $\lambda$.
+
+\subsection*{1.4 Extract memberships and compute leaf weights}
+After growth, the code extracts each tree's active columns from the shared
+CSR matrix. The optimized \code{_leaf_weights} then computes the diagonal and
+right-hand side and divides elementwise, without a dense linear solve.
+\[
+\begin{aligned}
+\text{Extraction per tree (conditional): }&
+O\bigl(nM+C+L_m\log(1+L_m)\bigr),\\
+\text{Weight calculation across all trees: }&O(nM+M+S).
+\end{aligned}
+\]
+Here $n$ is the training-sample count, $M$ is the tree count, $S$ is the total
+split count, $C=M+2S$ is the matrix's node-column count, and $L_m=1+S_m$ is
+the active-leaf count in tree $m$, which has $S_m$ splits.
+Across all trees, extraction contributes $O(nM^2+MC)$ plus sorting.
+Since $\sum_m L_m=M+S$, sorting is bounded by $(M+S)\log(1+M+S)$ and can
+share the total bound used for heap operations; the heap does not perform it.
+
+\subsection*{1.5 Total time and working memory}
+Adding these operations gives the following conditional fit-time upper bound:
+\begin{equation}
+\boxed{\begin{aligned}
+F=O\!\bigl(&nd+nM^2+MC+Md+dB\\
+&+(M+S)\log(1+M+S)+\sum_{m=1}^{M}S_m^2\bigr).
+\end{aligned}}
+\end{equation}
+Here $F$ is one forest's fit time; $n$ is the training-sample count; $d$ is the
+coordinate count; $M$ is the tree count; $S_m$ is the split count in tree $m$;
+$S=\sum_m S_m$; $C=M+2S$; and $B=\sum_e n_e$, where $n_e$ counts the training
+samples in the node processed at split $e$.
+
+The working-memory upper bound is
+\[
+O(nd+nM+M+S+B),
+\]
+where $n$ counts training samples, $d$ coordinates, $M$ trees, $S$ total splits,
+and $B$ total training-sample participation. This includes input arrays,
+memberships, node/event records, and retained parent/child sample-index arrays;
+temporary construction arrays are released after \code{train} returns.
+
+For the initial forest, later sections write $F_0$, $S_0$, $C_0$, $B_0$, and
+$S_{0,m}$ for these quantities. More generally, $f$ labels a forest,
+$S_{f,m}$ is its tree $m$'s split count, and $C_f=M+2S_f$.
+
+\section{Estimate the EGOP Matrix}
+
+\subsection*{2.1 Create perturbed inputs and estimate gradients}
+For every coordinate, \code{TrIM._get_importance} copies the training inputs
+and applies positive and negative perturbations. It queries the initial forest
+on both batches and divides their prediction difference by the step size.
+\[
+\text{Time: }O\bigl(nd^2+dP_0(n)\bigr).
+\]
+Here $n$ is the training-sample count, $d$ is the coordinate count, and $P_0(n)$
+is a common upper bound for one initial-forest prediction on an $n$-sample
+perturbed batch. Copying full arrays across coordinates costs $O(nd^2)$;
+there are $2d$ prediction calls, whose cost is expanded in Section 5.
+
+\emph{Different routes.} Perturbations can change sample routes. The bound
+$P_0(n)$ uses the maximum routing participation across these batches, so it
+does not assume identical or similar routes.
+
+\subsection*{2.2 Form the EGOP matrix}
+The code stacks the estimated gradients and computes their outer-product
+average using one dense matrix multiplication.
+\[
+H=GG^\top/n,\qquad \text{Time: }O(nd^2).
+\]
+Here $n$ is the training-sample count, $d$ is the coordinate count,
+$G\in\mathbb{R}^{d\times n}$ contains one gradient per column, and
+$H\in\mathbb{R}^{d\times d}$ is the estimated EGOP matrix. The product computes
+$d^2$ entries, each summing over $n$ samples.
+
+\subsection*{2.3 Total time and additional iterations}
+Adding perturbation, prediction, and matrix formation gives the first-round
+EGOP time, excluding the initial forest fit counted in Section 1:
+\[
+\boxed{T_2=O\bigl(nd^2+dP_0(n)\bigr).}
+\]
+Here $T_2$ is the first EGOP round's time, $n$ is the training-sample count,
+$d$ is the coordinate count, and $P_0(n)$ bounds one initial-forest prediction
+on any of the perturbed training batches.
+
+In later rounds, every perturbed batch is independently transformed before
+prediction. The resulting bound per EGOP estimate is
+\[
+O\bigl(nd^3+dP(n)\bigr),
+\]
+where $n$ counts training samples, $d$ coordinates, and $P(n)$ bounds one
+prediction by that round's fitted forest. The $2d$ dense transformations each
+cost $O(nd^2)$; the preceding forest refit is a separate cost.
+
+Gradient storage, perturbed batches, and the EGOP matrix require
+$O(nd+d^2)$ additional space, where $n$ counts training samples and $d$
+coordinates. Forest-prediction working memory is additional; calls run
+sequentially, so peak memory is not multiplied by the number of calls.
+
+\section{Transform the Inputs}
+
+\subsection*{3.1 Normalize the EGOP matrix}
+\code{TrIM.transform} divides the EGOP matrix by the mean of its column norms.
+This normalization is recomputed whenever the method is called.
+\[
+A=H/a(H),\qquad a(H)=\frac{1}{d}\sum_{j=1}^{d}\lVert H_{:,j}\rVert_2,
+\qquad \text{Time: }O(d^2).
+\]
+Here $H$ is the $d\times d$ EGOP matrix, $d$ is the coordinate count, $j$
+indexes columns, $a(H)$ is the normalization scalar, and $A$ is the normalized
+matrix. The transformation assumes $a(H)\ne0$.
+
+\subsection*{3.2 Transform training and test inputs}
+The code multiplies each input batch by the normalized matrix. Responses
+remain unchanged, and the full transformation retains the input dimension.
+\[
+Z=XA,\qquad \boxed{T_3=O\bigl((n+q)d^2\bigr).}
+\]
+Here $X$ is an input batch, $A$ is the $d\times d$ normalized EGOP matrix,
+$Z$ is the transformed batch, $n$ is the training-sample count, $q$ is the
+test-sample count, and $d$ is the coordinate count. $T_3$ includes both batch
+multiplications and their normalizations.
+
+Output arrays and the transformation require $O((n+q)d+d^2)$ space, where
+$n$ and $q$ count training and test samples and $d$ counts coordinates.
+
+\section{Train the Downstream Forest}
+
+\subsection*{4.1 Fit at a fixed lifetime}
+The code trains a new forest on transformed training inputs and the original
+responses. Its construction operations are the same as in Section 1, but
+transformation can change the resulting split counts and sample participation.
+\[
+\begin{aligned}
+\text{Time: }F_1=O\bigl(&nd+nM^2+MC_1+Md+dB_1\\
+&+(M+S_1)\log(1+M+S_1)+\sum_{m=1}^{M}S_{1,m}^2\bigr).
+\end{aligned}
+\]
+Here $F_1$ is downstream fit time, $n$ counts training samples, $d$ coordinates,
+$M$ trees, and $m$ indexes trees. $S_{1,m}$ counts splits in downstream tree
+$m$, $S_1=\sum_m S_{1,m}$, $C_1=M+2S_1$ counts node columns, and $B_1$ is total
+training-sample participation across downstream splits. Sparse extraction
+uses the conditional bound described in Section 1.
+
+Working memory is $O(nd+nM+M+S_1+B_1)$: $n$ counts training samples, $d$
+coordinates, $M$ trees, $S_1$ downstream splits, and $B_1$ training-sample
+participation. Prediction and error evaluation follow in Sections 5--6.
+
+\subsection*{4.2 Alternative: grow a forest through lifetime checkpoints}
+The experiments instead use \code{evaluate_all_lifetimes}, which interleaves
+training, prediction, and MSE calculation. It grows one forest rather than
+independently fitting a forest at every checkpoint.
+\[
+\begin{aligned}
+\text{Growth time: }O\bigl(&Nd+NM+Md+dB_1+B_{1,q}\\
+&+(M+S_1)\log(1+M+S_1)+\sum_{m=1}^{M}S_{1,m}^2\bigr).
+\end{aligned}
+\]
+Here $N=n+q$ combines $n$ training and $q$ test samples; $d$ is the coordinate
+count and $M$ the tree count. $S_{1,m}$ counts splits in downstream tree $m$,
+$S_1=\sum_m S_{1,m}$, and $B_1$ and $B_{1,q}$ are training- and test-sample
+participation across splits. Child bounds use only training samples; test
+samples are routed without scanning all their coordinates at each split.
+
+\subsection*{4.3 Checkpoint work and total sweep cost}
+At each checkpoint, the code extracts the current tree's memberships,
+recomputes its weights and predictions, averages stored tree predictions,
+and computes MSE.
+\[
+\text{Checkpoint work: }O\bigl(J[NM+C_1+n\log(1+n)]\bigr).
+\]
+Here $J=\lceil S_1/50\rceil$ is the checkpoint count for $S_1>0$ processed
+splits, $N=n+q$ combines training and test counts, $M$ is the tree count, and
+$C_1=M+2S_1$ is the node-column count. Checkpoints occur after splits
+$1,51,101,\ldots$. The $NM$ term covers membership scans and prediction
+averaging; $n\log(1+n)$ bounds sorting selected leaf indices, assuming each
+leaf contains a training sample.
+
+Adding growth and checkpoint costs gives the conditional total sweep time:
+\[
+\boxed{\begin{aligned}
+W=O\bigl(&Nd+NM+Md+dB_1+B_{1,q}\\
+&+(M+S_1)\log(1+M+S_1)+\sum_{m=1}^{M}S_{1,m}^2\\
+&+J[NM+C_1+n\log(1+n)]\bigr).
+\end{aligned}}
+\]
+Here $W$ combines Steps 4--6; $N=n+q$ counts all samples, $d$ coordinates,
+$M$ trees, $S_{1,m}$ splits in tree $m$, $S_1=\sum_m S_{1,m}$ total splits,
+$C_1=M+2S_1$ node columns, $B_1$ training participation, $B_{1,q}$ test
+participation, and $J=\lceil S_1/50\rceil$ checkpoints.
+Working memory is $O(Nd+NM+M+S_1+B_1+B_{1,q})$ with the same quantities.
+Do not add separate fixed-lifetime fitting and prediction costs when using $W$.
+
+\emph{Checkpoint behavior.} Only the tree associated with the current event
+is refreshed; other prediction columns retain earlier values and initially
+contain zeros. There is no forced terminal checkpoint, so this is not a
+synchronized evaluation of every tree. The bound describes successful runs
+with splits; the zero-split case reaches an unassigned prediction variable.
+
+\section{Predict on the Test Inputs}
+
+\subsection*{5.1 Initialize prediction data and replay splits}
+For fixed-lifetime prediction, \code{evaluate} initializes memberships and
+replays the stored split history on the transformed inputs. It uses
+\code{history.pop(0)}, which repeatedly shifts the remaining list entries.
+\[
+\text{Time: }O\bigl(n+td+tM+B_{f,t}+S_f^2\bigr).
+\]
+Here $n$ counts training responses whose mean is recomputed, $t$ is the
+prediction-batch size, $d$ the coordinate count, and $M$ the tree count.
+The label $f$ identifies the queried forest: $0$ initial, $1$ downstream.
+$S_f$ counts its splits, and $B_{f,t}$ counts the batch's sample participation
+across replayed splits. List-front removal alone costs $\Theta(S_f^2)$;
+this upper bound also covers active-leaf list updates.
+
+\subsection*{5.2 Extract memberships and average tree predictions}
+The code extracts each tree's active columns, applies the stored leaf weights,
+and averages tree predictions. Input transformation is already counted in
+Section 3.
+\[
+\text{Conditional time: }O\bigl(tM^2+MC_f+S_f^2\bigr).
+\]
+Here $t$ is the batch size, $M$ the tree count, $S_f$ the queried forest's
+split count, and $C_f=M+2S_f$ its node-column count.
+The extraction bound includes sorting: summed over trees, its cost is
+$O((M+S_f)^2)=O(MC_f+S_f^2)$. Applying weights and averaging costs $O(tM)$,
+which is covered by the displayed bound.
+
+\subsection*{5.3 Total prediction time and memory}
+Combining initialization, replay, extraction, and averaging gives
+\[
+\boxed{P_f(t)=O\bigl(n+td+tM^2+MC_f+B_{f,t}+S_f^2\bigr).}
+\]
+Here $P_f(t)$ is batch-prediction time for forest $f$, $n$ is the training
+count, $t$ the batch size, $d$ the coordinate count, $M$ the tree count,
+$C_f=M+2S_f$ the node-column count, $S_f$ the split count, and $B_{f,t}$ total
+batch-sample participation. Use $f=1,t=q$ for $q$ test samples; use $f=0,t=n$
+for initial EGOP queries, taking maximum participation across perturbations
+for their common upper bound.
+
+Working memory is $O(td+tM+M+S_f+B_{f,t})$, where $t$ counts batch samples,
+$d$ coordinates, $M$ trees, $S_f$ splits, and $B_{f,t}$ routing participation.
+The stored model is additional. Sweep prediction is already included in $W$,
+the combined lifetime-sweep time from Section 4.
+
+\section{Evaluate Prediction Error}
+
+\subsection*{6.1 Calculate mean squared error}
+The code compares predictions with the true test responses and averages the
+squared differences. Test responses are used for scoring, not for fitting
+leaf weights.
+\[
+\mathrm{MSE}=\frac{1}{q}\sum_{i=1}^{q}(\widehat y_i-y_i)^2,
+\qquad \text{Time: }O(q).
+\]
+Here $q$ is the test-sample count, $i$ indexes test samples, $y_i$ is a true
+response, and $\widehat y_i$ is its prediction. Vectorized evaluation uses at
+most $O(q)$ temporary space.
+
+\subsection*{6.2 Record and summarize checkpoint errors}
+For lifetime evaluation, the code records errors at checkpoints; comparison
+helpers can then report the minimum recorded test MSE.
+\[
+\text{MSE calculations: }O(Jq),\qquad
+\text{Minimum search: }O(J).
+\]
+Here $J$ is the number of checkpoints and $q$ the test-sample count. Recorded
+times and errors occupy $O(J)$ space. Checkpoint MSE work is already included
+in the sweep cost; reporting the minimum is not an independent validation
+and final-refit procedure.
+
+\subsection*{6.3 Total cost of the six-step pipeline}
+For one EGOP round followed by fixed-lifetime downstream regression, add the
+six steps without counting any fit or transformation twice:
+\[
+\boxed{\begin{aligned}
+T_{\mathrm{total}}=F_0+F_1
++O\bigl(&dP_0(n)+(n+q)d^2\\
+&+P_1(q)+q\bigr).
+\end{aligned}}
+\]
+Here $T_{\mathrm{total}}$ is total time, $F_0$ and $F_1$ are initial and
+downstream forest-fit times, $P_0(n)$ bounds an initial-forest prediction on
+any perturbed training batch, and $P_1(q)$ is downstream prediction time.
+The symbols $n$, $q$, and $d$ count training samples, test samples, and
+coordinates, respectively.
+
+For the experimental lifetime sweep, use its combined cost in place of
+separate downstream fitting, prediction, and MSE costs:
+\[
+\boxed{T_{\mathrm{total,sweep}}
+=F_0+O\bigl(dP_0(n)+(n+q)d^2+W\bigr).}
+\]
+Here $T_{\mathrm{total,sweep}}$ is total time with lifetime evaluation,
+$F_0$ is initial forest-fit time, $P_0(n)$ is the common initial prediction
+bound, $n$ counts training samples, $q$ test samples, $d$ coordinates, and
+$W$ combines downstream growth, checkpoint prediction, and error evaluation.
+These totals exclude data generation, oracle and CSS comparisons, repeated
+trials, and additional EGOP rounds. Actual runtime shares require profiling.
+
+\paragraph{Source references.}
+In \code{Mondrian_RF/Mondrian_forest.py}, see lines 32--39 for forest wrappers,
+83--108 for EGOP estimation, and 110--136 for TrIM fitting and transformation.
+In \code{Mondrian_RF/utils.py}, see lines 8--33 for leaf weights, 36--130 for
+training, 132--184 for prediction, and 209--325 for the lifetime sweep.
+
+\end{document}

@@ -1,0 +1,276 @@
+STEP_SIZE = 3.0
+LIFETIME = 5
+DIM_IN = 30
+ACTIVE = 2
+CSS_K = [2, 3, 4, 5]
+N_ITERATIONS = 1
+WEIGHT_POWER = 1.0
+FUN_STR = poly
+ROTATION_MODE = None
+N_ESTIMATORS (trees) = 30
+RF MAX_DEPTH_GRID = [1, 2, 3, 4, 5, 7, 10, 15, 20, 30]
+RF BOOTSTRAP = True  (bagging)
+RF MAX_FEATURES = 1.0  (feature subsampling)
+Training the Mondrian Forests:
+  0%|          | 0/1 [00:00<?, ?it/s]100%|██████████| 1/1 [00:01<00:00,  1.37s/it]100%|██████████| 1/1 [00:01<00:00,  1.37s/it]
+  0%|          | 0/1 [00:00<?, ?it/s]100%|██████████| 1/1 [00:01<00:00,  1.49s/it]100%|██████████| 1/1 [00:01<00:00,  1.49s/it]
+
+Estimated EGOP angle distances:
+  Iteration 1:
+    n = 3200: angle distance = 0.006396
+    n = 6400: angle distance = 0.003010
+CSS_K_LIST = [2, 3, 4, 5]
+CSS random_state = 0
+N_ITERATIONS = 1
+WEIGHT_POWER = 1.0
+sample sizes:   0%|          | 0/2 [00:00<?, ?it/s]
+n = 3200
+estimated H diagonal: [2.03024160e-02 2.06454041e-02 1.66517538e-06 1.61152976e-06
+ 2.97283767e-06 1.39789805e-06 1.53010267e-06 1.52033632e-06
+ 1.83322366e-06 1.95987390e-06 1.66182798e-06 1.32673261e-06
+ 1.99037445e-06 1.69891698e-06 1.90590623e-06 1.37777971e-06
+ 1.14235300e-06 1.36845301e-06 1.46340025e-06 1.42382349e-06
+ 1.13680717e-06 1.27119346e-06 4.41829736e-06 1.69830465e-06
+ 1.53468137e-06 1.51942829e-06 2.96009271e-06 2.07451522e-06
+ 1.47557714e-06 1.02934584e-06]
+estimated H top diagonal indices: [ 1  0 22  4 26 27 12  9 14  8 13 23  2 10  3 24  6  7 25 28 18 19  5 15
+ 17 11 21 16 20 29]
+estimated H eigenvalues descending: [2.28900539e-02 1.80586717e-02 5.87388517e-06 4.02710127e-06
+ 3.23973310e-06 2.99260146e-06 2.66155683e-06 2.26027437e-06
+ 2.10399307e-06 2.03939448e-06 1.91895158e-06 1.65410890e-06
+ 1.48587194e-06 1.47900751e-06 1.43222330e-06 1.33275319e-06
+ 1.28059006e-06 1.21688469e-06 1.15146468e-06 1.10740508e-06
+ 1.08517188e-06 1.02554524e-06 9.69547489e-07 9.30827382e-07
+ 9.13717713e-07 8.49463616e-07 8.11881955e-07 7.98039757e-07
+ 7.64232296e-07 6.57197324e-07]
+  [TrIM x_tr] shape=(3200, 30), sum_of_ranges=66.4509, per_dim_ranges=[32.284, 32.926, 0.086, 0.032, 0.029, 0.073, 0.057, 0.034, 0.026, 0.012, 0.028, 0.023, 0.058, 0.037, 0.035, 0.029, 0.036, 0.045, 0.063, 0.032, 0.035, 0.046, 0.134, 0.091, 0.057, 0.034, 0.041, 0.019, 0.028, 0.022]
+TrIM runtime (n=3200): 1.0657 s
+  TrIM transform time : 0.0010 s
+  TrIM RF time        : 1.0647 s
+
+  ===== k sweep: k = 2 (n = 3200) =====
+  [k=2] CSS top-diagonal selected columns (effective k=2): [1, 0]
+  [CSS x_tr k=2] shape=(3200, 2), sum_of_ranges=3.9980, per_dim_ranges=[1.998, 2.0]
+  [k=2] CSS runtime (n=3200): 0.5317 s (proj 0.0002 + rf 0.5316)
+    --- CSS vs Eigen selection diagnostic (k=2) ---
+      CSS top-diag columns      : [1, 0]
+      Eigen dominant coords     : [1, 0]
+      selection overlap         : 2/2
+      max eigvec angle from axis: 42.965 deg (0 = perfectly axis-aligned)
+      H off-diag/diag Frobenius : 0.1179 (0 = exactly diagonal)
+    --- end CSS vs Eigen diagnostic ---
+  [Eigen(est) x_tr k=2] shape=(3200, 2), sum_of_ranges=5.5303, per_dim_ranges=[3.133, 2.397]
+  [k=2] Eigen runtime (n=3200): 0.5783 s (proj 0.0007 + rf 0.5776)
+  [k=2] Best MSE over max_depth:
+    no transformation     : 1.332991e-03
+    transform by true H   : 4.831602e-04
+    TrIM                  : 1.425860e-03
+    Weighted Mondrian     : 1.332991e-03
+    CSS (estimated H)     : 4.646330e-04
+    Eigen (estimated H)   : 7.391901e-04
+
+  ===== k sweep: k = 3 (n = 3200) =====
+  [k=3] CSS top-diagonal selected columns (effective k=3): [1, 0, 22]
+  [CSS x_tr k=3] shape=(3200, 3), sum_of_ranges=5.9965, per_dim_ranges=[1.998, 2.0, 1.998]
+  [k=3] CSS runtime (n=3200): 0.5725 s (proj 0.0002 + rf 0.5723)
+    --- CSS vs Eigen selection diagnostic (k=3) ---
+      CSS top-diag columns      : [1, 0, 22]
+      Eigen dominant coords     : [1, 0, 22]
+      selection overlap         : 3/3
+      max eigvec angle from axis: 42.965 deg (0 = perfectly axis-aligned)
+      H off-diag/diag Frobenius : 0.1179 (0 = exactly diagonal)
+    --- end CSS vs Eigen diagnostic ---
+  [Eigen(est) x_tr k=3] shape=(3200, 3), sum_of_ranges=8.2958, per_dim_ranges=[4.699, 3.596, 0.001]
+  [k=3] Eigen runtime (n=3200): 0.6298 s (proj 0.0005 + rf 0.6293)
+  [k=3] Best MSE over max_depth:
+    no transformation     : 1.332991e-03
+    transform by true H   : 4.831602e-04
+    TrIM                  : 1.425860e-03
+    Weighted Mondrian     : 1.332991e-03
+    CSS (estimated H)     : 6.044800e-04
+    Eigen (estimated H)   : 1.016998e-03
+
+  ===== k sweep: k = 4 (n = 3200) =====
+  [k=4] CSS top-diagonal selected columns (effective k=4): [1, 0, 22, 4]
+  [CSS x_tr k=4] shape=(3200, 4), sum_of_ranges=7.9953, per_dim_ranges=[1.998, 2.0, 1.998, 1.999]
+  [k=4] CSS runtime (n=3200): 0.6481 s (proj 0.0002 + rf 0.6479)
+    --- CSS vs Eigen selection diagnostic (k=4) ---
+      CSS top-diag columns      : [1, 0, 22, 4]
+      Eigen dominant coords     : [1, 0, 22, 26]
+      selection overlap         : 3/4
+      max eigvec angle from axis: 50.463 deg (0 = perfectly axis-aligned)
+      H off-diag/diag Frobenius : 0.1179 (0 = exactly diagonal)
+    --- end CSS vs Eigen diagnostic ---
+  [Eigen(est) x_tr k=4] shape=(3200, 4), sum_of_ranges=11.0614, per_dim_ranges=[6.264, 4.794, 0.002, 0.001]
+  [k=4] Eigen runtime (n=3200): 0.5871 s (proj 0.0006 + rf 0.5866)
+  [k=4] Best MSE over max_depth:
+    no transformation     : 1.332991e-03
+    transform by true H   : 4.831602e-04
+    TrIM                  : 1.425860e-03
+    Weighted Mondrian     : 1.332991e-03
+    CSS (estimated H)     : 6.525861e-04
+    Eigen (estimated H)   : 1.208980e-03
+
+  ===== k sweep: k = 5 (n = 3200) =====
+  [k=5] CSS top-diagonal selected columns (effective k=5): [1, 0, 22, 4, 26]
+  [CSS x_tr k=5] shape=(3200, 5), sum_of_ranges=9.9948, per_dim_ranges=[1.998, 2.0, 1.998, 1.999, 2.0]
+  [k=5] CSS runtime (n=3200): 0.5945 s (proj 0.0003 + rf 0.5942)
+    --- CSS vs Eigen selection diagnostic (k=5) ---
+      CSS top-diag columns      : [1, 0, 22, 4, 26]
+      Eigen dominant coords     : [1, 0, 22, 26, 4]
+      selection overlap         : 5/5
+      max eigvec angle from axis: 57.366 deg (0 = perfectly axis-aligned)
+      H off-diag/diag Frobenius : 0.1179 (0 = exactly diagonal)
+    --- end CSS vs Eigen diagnostic ---
+  [Eigen(est) x_tr k=5] shape=(3200, 5), sum_of_ranges=13.8274, per_dim_ranges=[7.83, 5.992, 0.002, 0.002, 0.002]
+  [k=5] Eigen runtime (n=3200): 0.6136 s (proj 0.0006 + rf 0.6129)
+  [k=5] Best MSE over max_depth:
+    no transformation     : 1.332991e-03
+    transform by true H   : 4.831602e-04
+    TrIM                  : 1.425860e-03
+    Weighted Mondrian     : 1.332991e-03
+    CSS (estimated H)     : 7.754285e-04
+    Eigen (estimated H)   : 1.360103e-03
+
+  ===== Compact summary: n = 3200 =====
+  k  | CSS best MSE | Eigen best MSE | CSS/Eigen | CSS runtime | Eigen runtime
+  ------------------------------------------------------------------------------
+  2  | 4.646330e-04 |   7.391901e-04 |    0.6286 |    0.5317 s |    0.5783 s
+  3  | 6.044800e-04 |   1.016998e-03 |    0.5944 |    0.5725 s |    0.6298 s
+  4  | 6.525861e-04 |   1.208980e-03 |    0.5398 |    0.6481 s |    0.5871 s
+  5  | 7.754285e-04 |   1.360103e-03 |    0.5701 |    0.5945 s |    0.6136 s
+  ------------------------------------------------------------------------------
+
+  ===== eigen sentinel (n=3200, eigen_mode=kdim) =====
+  --- check_eigen_kd_sentinel (k=d=30, weight_power=1.0) ---
+    two_one_norm sums over columns (=> normalize divides by avg column norm)
+    max|reconstruct(k=d) - TrIM transform| = 8.882e-15 (OK: reproduces TrIM)
+    sum_of_ranges: reconstruct=66.4509  kdim=82.9945  TrIM=66.4509
+  --- end check_eigen_kd_sentinel ---
+sample sizes:  50%|█████     | 1/2 [00:10<00:10, 10.23s/it]
+n = 6400
+estimated H diagonal: [2.12437126e-02 2.21775576e-02 1.29242930e-06 7.93092317e-07
+ 6.00143950e-07 7.38377612e-07 7.07818492e-07 8.63726992e-07
+ 8.74505274e-07 8.75562118e-07 1.10640473e-06 6.05486472e-07
+ 1.18997113e-06 7.75712646e-07 7.83503296e-07 8.90998774e-07
+ 7.84058037e-07 8.08855648e-07 6.99670880e-07 1.17019812e-06
+ 8.40987625e-07 6.66270463e-07 8.31656726e-07 8.14987271e-07
+ 7.70549564e-07 1.30950541e-06 7.60924047e-07 8.80571404e-07
+ 1.05926811e-06 6.75474370e-07]
+estimated H top diagonal indices: [ 1  0 25  2 12 19 10 28 15 27  9  8  7 20 22 23 17  3 16 14 13 24 26  5
+  6 18 29 21 11  4]
+estimated H eigenvalues descending: [2.24675380e-02 2.09539689e-02 1.86215090e-06 1.60534690e-06
+ 1.40009053e-06 1.32285777e-06 1.25534411e-06 1.13568080e-06
+ 1.07688579e-06 1.04119954e-06 9.98459618e-07 9.36227565e-07
+ 8.51579702e-07 8.16382394e-07 7.66177778e-07 7.52871579e-07
+ 7.39944241e-07 6.92957237e-07 6.87875247e-07 6.70200162e-07
+ 6.53209369e-07 6.15532157e-07 5.88798348e-07 5.65652008e-07
+ 5.55916140e-07 5.10930039e-07 4.99970005e-07 4.58309261e-07
+ 4.45700782e-07 4.27763093e-07]
+  [TrIM x_tr] shape=(6400, 30), sum_of_ranges=61.6058, per_dim_ranges=[29.922, 31.079, 0.03, 0.017, 0.022, 0.034, 0.018, 0.034, 0.017, 0.011, 0.035, 0.027, 0.029, 0.043, 0.014, 0.026, 0.02, 0.014, 0.01, 0.02, 0.024, 0.029, 0.02, 0.006, 0.012, 0.008, 0.023, 0.02, 0.019, 0.024]
+TrIM runtime (n=6400): 1.5507 s
+  TrIM transform time : 0.0007 s
+  TrIM RF time        : 1.5500 s
+
+  ===== k sweep: k = 2 (n = 6400) =====
+  [k=2] CSS top-diagonal selected columns (effective k=2): [1, 0]
+  [CSS x_tr k=2] shape=(6400, 2), sum_of_ranges=3.9985, per_dim_ranges=[1.999, 2.0]
+  [k=2] CSS runtime (n=6400): 0.6138 s (proj 0.0002 + rf 0.6136)
+    --- CSS vs Eigen selection diagnostic (k=2) ---
+      CSS top-diag columns      : [1, 0]
+      Eigen dominant coords     : [1, 0]
+      selection overlap         : 2/2
+      max eigvec angle from axis: 25.952 deg (0 = perfectly axis-aligned)
+      H off-diag/diag Frobenius : 0.0276 (0 = exactly diagonal)
+    --- end CSS vs Eigen diagnostic ---
+  [Eigen(est) x_tr k=2] shape=(6400, 2), sum_of_ranges=5.2915, per_dim_ranges=[2.739, 2.552]
+  [k=2] Eigen runtime (n=6400): 0.6723 s (proj 0.0008 + rf 0.6715)
+  [k=2] Best MSE over max_depth:
+    no transformation     : 4.546005e-04
+    transform by true H   : 1.774202e-04
+    TrIM                  : 6.232434e-04
+    Weighted Mondrian     : 4.546005e-04
+    CSS (estimated H)     : 1.678951e-04
+    Eigen (estimated H)   : 3.159349e-04
+
+  ===== k sweep: k = 3 (n = 6400) =====
+  [k=3] CSS top-diagonal selected columns (effective k=3): [1, 0, 25]
+  [CSS x_tr k=3] shape=(6400, 3), sum_of_ranges=5.9982, per_dim_ranges=[1.999, 2.0, 2.0]
+  [k=3] CSS runtime (n=6400): 0.6844 s (proj 0.0002 + rf 0.6842)
+    --- CSS vs Eigen selection diagnostic (k=3) ---
+      CSS top-diag columns      : [1, 0, 25]
+      Eigen dominant coords     : [1, 0, 2]
+      selection overlap         : 2/3
+      max eigvec angle from axis: 61.153 deg (0 = perfectly axis-aligned)
+      H off-diag/diag Frobenius : 0.0276 (0 = exactly diagonal)
+    --- end CSS vs Eigen diagnostic ---
+  [Eigen(est) x_tr k=3] shape=(6400, 3), sum_of_ranges=7.9375, per_dim_ranges=[4.109, 3.828, 0.001]
+  [k=3] Eigen runtime (n=6400): 0.6819 s (proj 0.0005 + rf 0.6814)
+  [k=3] Best MSE over max_depth:
+    no transformation     : 4.546005e-04
+    transform by true H   : 1.774202e-04
+    TrIM                  : 6.232434e-04
+    Weighted Mondrian     : 4.546005e-04
+    CSS (estimated H)     : 2.087558e-04
+    Eigen (estimated H)   : 4.225396e-04
+
+  ===== k sweep: k = 4 (n = 6400) =====
+  [k=4] CSS top-diagonal selected columns (effective k=4): [1, 0, 25, 2]
+  [CSS x_tr k=4] shape=(6400, 4), sum_of_ranges=7.9978, per_dim_ranges=[1.999, 2.0, 2.0, 2.0]
+  [k=4] CSS runtime (n=6400): 0.7141 s (proj 0.0002 + rf 0.7139)
+    --- CSS vs Eigen selection diagnostic (k=4) ---
+      CSS top-diag columns      : [1, 0, 25, 2]
+      Eigen dominant coords     : [1, 0, 2, 25]
+      selection overlap         : 4/4
+      max eigvec angle from axis: 61.153 deg (0 = perfectly axis-aligned)
+      H off-diag/diag Frobenius : 0.0276 (0 = exactly diagonal)
+    --- end CSS vs Eigen diagnostic ---
+  [Eigen(est) x_tr k=4] shape=(6400, 4), sum_of_ranges=10.5835, per_dim_ranges=[5.478, 5.104, 0.001, 0.001]
+  [k=4] Eigen runtime (n=6400): 0.7258 s (proj 0.0005 + rf 0.7253)
+  [k=4] Best MSE over max_depth:
+    no transformation     : 4.546005e-04
+    transform by true H   : 1.774202e-04
+    TrIM                  : 6.232434e-04
+    Weighted Mondrian     : 4.546005e-04
+    CSS (estimated H)     : 2.381152e-04
+    Eigen (estimated H)   : 4.880496e-04
+
+  ===== k sweep: k = 5 (n = 6400) =====
+  [k=5] CSS top-diagonal selected columns (effective k=5): [1, 0, 25, 2, 12]
+  [CSS x_tr k=5] shape=(6400, 5), sum_of_ranges=9.9971, per_dim_ranges=[1.999, 2.0, 2.0, 2.0, 1.999]
+  [k=5] CSS runtime (n=6400): 0.7630 s (proj 0.0003 + rf 0.7627)
+    --- CSS vs Eigen selection diagnostic (k=5) ---
+      CSS top-diag columns      : [1, 0, 25, 2, 12]
+      Eigen dominant coords     : [1, 0, 2, 25, 28]
+      selection overlap         : 4/5
+      max eigvec angle from axis: 61.684 deg (0 = perfectly axis-aligned)
+      H off-diag/diag Frobenius : 0.0276 (0 = exactly diagonal)
+    --- end CSS vs Eigen diagnostic ---
+  [Eigen(est) x_tr k=5] shape=(6400, 5), sum_of_ranges=13.2295, per_dim_ranges=[6.848, 6.38, 0.001, 0.001, 0.001]
+  [k=5] Eigen runtime (n=6400): 0.7547 s (proj 0.0005 + rf 0.7542)
+  [k=5] Best MSE over max_depth:
+    no transformation     : 4.546005e-04
+    transform by true H   : 1.774202e-04
+    TrIM                  : 6.232434e-04
+    Weighted Mondrian     : 4.546005e-04
+    CSS (estimated H)     : 2.524466e-04
+    Eigen (estimated H)   : 5.551657e-04
+
+  ===== Compact summary: n = 6400 =====
+  k  | CSS best MSE | Eigen best MSE | CSS/Eigen | CSS runtime | Eigen runtime
+  ------------------------------------------------------------------------------
+  2  | 1.678951e-04 |   3.159349e-04 |    0.5314 |    0.6138 s |    0.6723 s
+  3  | 2.087558e-04 |   4.225396e-04 |    0.4941 |    0.6844 s |    0.6819 s
+  4  | 2.381152e-04 |   4.880496e-04 |    0.4879 |    0.7141 s |    0.7258 s
+  5  | 2.524466e-04 |   5.551657e-04 |    0.4547 |    0.7630 s |    0.7547 s
+  ------------------------------------------------------------------------------
+
+  ===== eigen sentinel (n=6400, eigen_mode=kdim) =====
+  --- check_eigen_kd_sentinel (k=d=30, weight_power=1.0) ---
+    two_one_norm sums over columns (=> normalize divides by avg column norm)
+    max|reconstruct(k=d) - TrIM transform| = 7.105e-15 (OK: reproduces TrIM)
+    sum_of_ranges: reconstruct=61.6058  kdim=79.3953  TrIM=61.6058
+  --- end check_eigen_kd_sentinel ---
+sample sizes: 100%|██████████| 2/2 [00:22<00:00, 11.67s/it]sample sizes: 100%|██████████| 2/2 [00:22<00:00, 11.46s/it]
+
+Done. Figures are in 'RF_results/'.

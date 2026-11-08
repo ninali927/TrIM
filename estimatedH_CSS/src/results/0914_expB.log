@@ -1,0 +1,46 @@
+# starts from d = 100, 
+======================================================================
+run started 2026-09-14 00:23:30
+======================================================================
+Experiment B: EGOP error vs n at fixed d
+  EGOP_BACKEND  = mondrian (forced)
+  D_LIST        = [100, 200, 500]
+  SEEDS         = [0]
+  N_ITERATIONS  = 4
+  ACTIVE        = 2
+  LIFETIME      = 5
+  N_ESTIMATORS  = 30
+  FUN_STR       = poly
+  ROTATION_MODE = orth
+  N_TEST        = 3200
+  d=100: n=[400, 800, 1600, 3200, 6400, 12800], step_size=1.0000
+  d=200: n=[400, 800, 1600, 3200, 6400, 12800], step_size=1.0000
+  d=500: n=[400, 800, 1600, 3200, 6400, 12800], step_size=1.0000
+
+[d=100] seed=0  (n_max=12800, h=1.0000)
+Training the Mondrian Forests:
+
+  0%|         100%|██████████| 1/1 [00:32<00:00, 32.16s/it]100%|██████████| 1/1 [00:32<00:00, 32.16s/it]
+  0%|          | 0/1 [00:00<?, ?it/s]100%|██████████| 1/1 [01:19<00:00, 79.16s/it]100%|██████████| 1/1 [01:19<00:00, 79.16s/it]
+  0%|          | 0/1 [00:00<?, ?it/s]100%|██████████| 1/1 [03:35<00:00, 215.46s/it]100%|██████████| 1/1 [03:35<00:00, 215.46s/it]
+  0%|          | 0/1 [00:00<?, ?it/s]100%|██████████| 1/1 [08:54<00:00, 534.77s/it]100%|██████████| 1/1 [08:54<00:00, 534.77s/it]
+  0%|          | 0/1 [00:00<?, ?it/s]100%|██████████| 1/1 [27:22<00:00, 1642.70s/it]100%|██████████| 1/1 [27:22<00:00, 1642.70s/it]
+  0%|          | 0/1 [00:00<?, ?it/s]100%|██████████| 1/1 [2:55:50<00:00, 10550.15s/it]100%|██████████| 1/1 [2:55:50<00:00, 10550.15s/it]
+    iter 1  ( 13056.1s): n=400:1.5659  n=800:1.4785  n=1600:1.3221  n=3200:1.4682  n=6400:1.4376  n=12800:1.5702
+    iter 2  ( 21117.8s): n=400:1.5541  n=800:1.5132  n=1600:1.4432  n=3200:1.4982  n=6400:1.4608  n=12800:1.5555
+Traceback (most recent call last):
+  File "/home/ninali/TrIM_project/estimatedH_CSS/src/0913_main.py", line 201, in <module>
+    sim.reiterate()
+  File "/home/ninali/TrIM_project/estimatedH_CSS/src/utils.py", line 188, in reiterate
+    self.forests[n_sim][trial].reiterate()
+  File "/home/ninali/TrIM_project/estimatedH_CSS/src/Mondrian_RF/Mondrian_forest.py", line 227, in reiterate
+    self.H = self.estimate_H_finite_diff()
+  File "/home/ninali/TrIM_project/estimatedH_CSS/src/Mondrian_RF/Mondrian_forest.py", line 208, in estimate_H_finite_diff
+    importance = self._get_importance()
+  File "/home/ninali/TrIM_project/estimatedH_CSS/src/Mondrian_RF/Mondrian_forest.py", line 195, in _get_importance
+    y_eval_neg = self.mf.predict(self.transform(x_eval_neg))
+  File "/home/ninali/TrIM_project/estimatedH_CSS/src/Mondrian_RF/Mondrian_forest.py", line 55, in predict
+    return evaluate(self.y, X, self.n_estimators, self.history, self.w_trees)
+  File "/home/ninali/TrIM_project/estimatedH_CSS/src/Mondrian_RF/utils.py", line 154, in evaluate
+    while len(history) > 0:
+KeyboardInterrupt

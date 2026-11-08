@@ -1,0 +1,79 @@
+ROTATION_MODE = orth (orth)
+DIM_IN=30 ACTIVE=2 CSS_K_LIST=[4, 8, 12, 16] N_SEEDS=5
+N_ESTIMATORS=30 STEP_SIZE=3.0 FUN_STR=poly
+EGOP backend=rf  downstream=rf  BOOTSTRAP=True  MAX_FEATURES=1.0
+[seed=0 n=3200] EGOP angle_dist=1.4270  (done)
+[seed=0 n=6400] EGOP angle_dist=1.4091  (done)
+[seed=1 n=3200] EGOP angle_dist=1.4591  (done)
+[seed=1 n=6400] EGOP angle_dist=1.4132  (done)
+[seed=2 n=3200] EGOP angle_dist=1.3726  (done)
+[seed=2 n=6400] EGOP angle_dist=1.5445  (done)
+[seed=3 n=3200] EGOP angle_dist=1.5297  (done)
+[seed=3 n=6400] EGOP angle_dist=1.4062  (done)
+[seed=4 n=3200] EGOP angle_dist=1.5450  (done)
+[seed=4 n=6400] EGOP angle_dist=1.5036  (done)
+
+
+=========  ISOLATION SUMMARY (rotated, RF downstream, median over 5 seeds)  =========
+
+  n = 3200   EGOP angle_dist to true_H: median 1.4591 [1.3726, 1.5450]  (max possible pi/2=1.5708)
+  Method / k                  |  median MSE |       [min,       max] | med rt(s) | rt/TrIM
+  --------------------------------------------------------------------------------------------
+  transform true H (oracle)   |  1.1991e-01 | 1.0542e-01, 3.7999e-01 |     1.154 |   1.013
+  TrIM (est H)                |  1.2467e+00 | 9.2070e-01, 1.9408e+00 |     1.139 |   1.000
+  --------------------------------------------------------------------------------------------
+  Direct CSS (true H) k=4     |  1.8704e-01 | 1.4008e-01, 4.0043e-01 |     0.580 |   0.509
+  CSS-X (true H) k=4          |  1.9277e+00 | 1.7970e+00, 2.0700e+00 |     0.624 |   0.547
+  Direct CSS (est H) k=4      |  1.9701e+00 | 1.7987e+00, 2.1108e+00 |     0.597 |   0.524
+  CSS-X (est H) k=4           |  1.9739e+00 | 1.8316e+00, 2.1237e+00 |     0.622 |   0.546
+  --------------------------------------------------------------------------------------------
+  Direct CSS (true H) k=8     |  1.3404e-01 | 1.1731e-01, 3.8886e-01 |     0.738 |   0.648
+  CSS-X (true H) k=8          |  1.8330e+00 | 1.6970e+00, 2.0146e+00 |     0.718 |   0.630
+  Direct CSS (est H) k=8      |  1.7470e+00 | 1.5682e+00, 2.1111e+00 |     0.701 |   0.615
+  CSS-X (est H) k=8           |  1.9727e+00 | 1.8228e+00, 2.1237e+00 |     0.732 |   0.643
+  --------------------------------------------------------------------------------------------
+  Direct CSS (true H) k=12    |  1.1874e-01 | 1.0169e-01, 3.8595e-01 |     0.796 |   0.699
+  CSS-X (true H) k=12         |  1.7817e+00 | 1.7140e+00, 1.9154e+00 |     0.809 |   0.710
+  Direct CSS (est H) k=12     |  1.6074e+00 | 1.4490e+00, 2.0905e+00 |     0.798 |   0.701
+  CSS-X (est H) k=12          |  1.9728e+00 | 1.8228e+00, 2.1237e+00 |     0.818 |   0.718
+  --------------------------------------------------------------------------------------------
+  Direct CSS (true H) k=16    |  1.2721e-01 | 1.1113e-01, 3.7911e-01 |     0.884 |   0.776
+  CSS-X (true H) k=16         |  1.8042e+00 | 1.7249e+00, 1.8909e+00 |     0.891 |   0.782
+  Direct CSS (est H) k=16     |  1.4787e+00 | 1.1641e+00, 2.0335e+00 |     0.915 |   0.804
+  CSS-X (est H) k=16          |  1.9661e+00 | 1.7987e+00, 2.1237e+00 |     0.934 |   0.820
+  --------------------------------------------------------------------------------------------
+
+  n = 6400   EGOP angle_dist to true_H: median 1.4132 [1.4062, 1.5445]  (max possible pi/2=1.5708)
+  Method / k                  |  median MSE |       [min,       max] | med rt(s) | rt/TrIM
+  --------------------------------------------------------------------------------------------
+  transform true H (oracle)   |  6.8522e-02 | 5.0053e-02, 1.0023e-01 |     1.708 |   0.982
+  TrIM (est H)                |  1.0323e+00 | 7.9332e-01, 1.2014e+00 |     1.740 |   1.000
+  --------------------------------------------------------------------------------------------
+  Direct CSS (true H) k=4     |  9.7290e-02 | 7.9525e-02, 1.8423e-01 |     0.754 |   0.434
+  CSS-X (true H) k=4          |  1.9237e+00 | 1.7847e+00, 2.0790e+00 |     0.734 |   0.422
+  Direct CSS (est H) k=4      |  1.6921e+00 | 1.5082e+00, 2.1017e+00 |     0.729 |   0.419
+  CSS-X (est H) k=4           |  1.9774e+00 | 1.8292e+00, 2.0973e+00 |     0.739 |   0.425
+  --------------------------------------------------------------------------------------------
+  Direct CSS (true H) k=8     |  7.3198e-02 | 6.0638e-02, 1.1395e-01 |     0.913 |   0.525
+  CSS-X (true H) k=8          |  1.7458e+00 | 1.6339e+00, 1.9089e+00 |     0.877 |   0.504
+  Direct CSS (est H) k=8      |  1.2772e+00 | 1.2511e+00, 1.6780e+00 |     0.923 |   0.531
+  CSS-X (est H) k=8           |  1.9752e+00 | 1.7813e+00, 2.0959e+00 |     0.896 |   0.515
+  --------------------------------------------------------------------------------------------
+  Direct CSS (true H) k=12    |  6.5031e-02 | 5.9272e-02, 9.7232e-02 |     1.087 |   0.625
+  CSS-X (true H) k=12         |  1.6596e+00 | 1.6328e+00, 1.8071e+00 |     1.035 |   0.595
+  Direct CSS (est H) k=12     |  1.4653e+00 | 1.1159e+00, 1.5953e+00 |     1.103 |   0.634
+  CSS-X (est H) k=12          |  1.9348e+00 | 1.7269e+00, 2.0957e+00 |     1.058 |   0.608
+  --------------------------------------------------------------------------------------------
+  Direct CSS (true H) k=16    |  5.9762e-02 | 5.2837e-02, 9.9646e-02 |     1.238 |   0.712
+  CSS-X (true H) k=16         |  1.6735e+00 | 1.6047e+00, 1.8263e+00 |     1.239 |   0.712
+  Direct CSS (est H) k=16     |  1.1780e+00 | 9.6038e-01, 1.3482e+00 |     1.250 |   0.718
+  CSS-X (est H) k=16          |  1.9013e+00 | 1.6962e+00, 2.0280e+00 |     1.235 |   0.710
+  --------------------------------------------------------------------------------------------
+
+How to read the isolation:
+  * If CSS-X (true H) stays ~flat/floored across k while Direct CSS (true H)
+    drops toward the oracle as k grows -> the CSS-X failure is CONSTRUCTION
+    (original axes cannot span the rotated subspace), NOT H-estimation error,
+    since both use a perfect H.
+  * Compare (true H) vs (est H) rows at the same k to see how much the poor
+    rotated EGOP estimate degrades each method on top of the construction limit.

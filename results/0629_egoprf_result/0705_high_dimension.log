@@ -1,0 +1,59 @@
+DIM_LIST = [30, 100, 300, 1000]
+ACTIVE = 2   CSS_K = 2
+SAMPLE_RANGE = [3200, 6400]
+N_ESTIMATORS (trees) = 30
+STEP_SIZE = 3.0   FUN_STR = poly   ROTATION_MODE = None
+EGOP backend = rf (explicit)   downstream = rf
+RF BOOTSTRAP = True   RF MAX_FEATURES = 1.0
+
+[d=30    n=3200] EGOP(rf)    1.163s  angle_dist 0.005123  CSS cols [1, 0]
+    MSE   | no-trans 1.332991e-03 | trueH 4.831602e-04 | TrIM 1.425860e-03 | CSS 4.646330e-04 | CSS/TrIM 0.3259
+    time  | no-trans    1.146s | trueH    0.573s | TrIM    1.090s | CSS    0.589s | TrIM/CSS x1.85
+
+[d=30    n=6400] EGOP(rf)    1.408s  angle_dist 0.002765  CSS cols [1, 0]
+    MSE   | no-trans 4.546005e-04 | trueH 1.774202e-04 | TrIM 6.232434e-04 | CSS 1.678951e-04 | CSS/TrIM 0.2694
+    time  | no-trans    1.633s | trueH    0.574s | TrIM    1.532s | CSS    0.632s | TrIM/CSS x2.42
+
+[d=100   n=3200] EGOP(rf)    4.028s  angle_dist 0.009307  CSS cols [1, 0]
+    MSE   | no-trans 1.431567e-03 | trueH 4.139995e-04 | TrIM 7.473987e-04 | CSS 4.099472e-04 | CSS/TrIM 0.5485
+    time  | no-trans    2.091s | trueH    0.597s | TrIM    1.927s | CSS    0.587s | TrIM/CSS x3.29
+
+[d=100   n=6400] EGOP(rf)    4.474s  angle_dist 0.003560  CSS cols [0, 1]
+    MSE   | no-trans 6.104346e-04 | trueH 1.617205e-04 | TrIM 3.410881e-04 | CSS 1.528831e-04 | CSS/TrIM 0.4482
+    time  | no-trans    3.419s | trueH    0.660s | TrIM    3.385s | CSS    0.669s | TrIM/CSS x5.06
+
+[d=300   n=3200] EGOP(rf)   13.262s  angle_dist 0.009464  CSS cols [0, 1]
+    MSE   | no-trans 1.619486e-03 | trueH 2.740341e-04 | TrIM 6.511697e-04 | CSS 2.710901e-04 | CSS/TrIM 0.4163
+    time  | no-trans    4.523s | trueH    0.611s | TrIM    4.618s | CSS    0.569s | TrIM/CSS x8.12
+
+[d=300   n=6400] EGOP(rf)   13.855s  angle_dist 0.004210  CSS cols [0, 1]
+    MSE   | no-trans 5.984651e-04 | trueH 1.432904e-04 | TrIM 2.192444e-04 | CSS 1.436977e-04 | CSS/TrIM 0.6554
+    time  | no-trans   10.945s | trueH    0.877s | TrIM    9.052s | CSS    0.630s | TrIM/CSS x14.37
+
+[d=1000  n=3200] EGOP(rf)   52.822s  angle_dist 0.012404  CSS cols [0, 1]
+    MSE   | no-trans 2.514791e-03 | trueH 3.620391e-04 | TrIM 8.755134e-04 | CSS 3.993844e-04 | CSS/TrIM 0.4562
+    time  | no-trans   13.267s | trueH    0.839s | TrIM   12.772s | CSS    0.566s | TrIM/CSS x22.55
+
+[d=1000  n=6400] EGOP(rf)   64.763s  angle_dist 0.004430  CSS cols [0, 1]
+    MSE   | no-trans 1.002791e-03 | trueH 1.793659e-04 | TrIM 2.688604e-04 | CSS 1.765400e-04 | CSS/TrIM 0.6566
+    time  | no-trans   30.487s | trueH    1.083s | TrIM   28.525s | CSS    0.593s | TrIM/CSS x48.12
+
+  ===== d-scan summary: n = 3200 (MAX_FEATURES=1.0) =====
+  d     | EGOP(s) | angle_dist | no-trans MSE | trueH MSE  | TrIM MSE   | CSS MSE    | CSS/TrIM | no-trans(s) | trueH(s) | TrIM(s) | CSS(s) | TrIM/CSS
+  ------------------------------------------------------------------------------------------------------------------------------------
+  30    |   1.163 |   0.005123 |   1.3330e-03 | 4.8316e-04 | 1.4259e-03 | 4.6463e-04 |   0.3259 |       1.146 |    0.573 |   1.090 |  0.589 | x1.85
+  100   |   4.028 |   0.009307 |   1.4316e-03 | 4.1400e-04 | 7.4740e-04 | 4.0995e-04 |   0.5485 |       2.091 |    0.597 |   1.927 |  0.587 | x3.29
+  300   |  13.262 |   0.009464 |    1.6195e-03| 2.7403e-04 | 6.5117e-04 | 2.7109e-04 |   0.4163 |       4.523 |    0.611 |   4.618 |  0.569 | x8.12
+  1000  |  52.822 |   0.012404 |   2.5148e-03 | 3.6204e-04 | 8.7551e-04 | 3.9938e-04 |   0.4562 |      13.267 |    0.839 |  12.772 |  0.566 | x22.55
+  ------------------------------------------------------------------------------------------------------------------------------------
+
+  ===== d-scan summary: n = 6400 (MAX_FEATURES=1.0) =====
+  d     | EGOP(s) | angle_dist | no-trans MSE | trueH MSE  | TrIM MSE   | CSS MSE    | CSS/TrIM | no-trans(s) | trueH(s) | TrIM(s) | CSS(s) | TrIM/CSS
+  ------------------------------------------------------------------------------------------------------------------------------------
+  30    |   1.408 |   0.002765 |   4.5460e-04 | 1.7742e-04 | 6.2324e-04 | 1.6790e-04 |   0.2694 |       1.633 |    0.574 |   1.532 |  0.632 | x2.42
+  100   |   4.474 |   0.003560 |   6.1043e-04 | 1.6172e-04 | 3.4109e-04 | 1.5288e-04 |   0.4482 |       3.419 |    0.660 |   3.385 |  0.669 | x5.06
+  300   |  13.855 |   0.004210 |   5.9847e-04 | 1.4329e-04 | 2.1924e-04 | 1.4370e-04 |   0.6554 |      10.945 |    0.877 |   9.052 |  0.630 | x14.37
+  1000  |  64.763 |   0.004430 |   1.0028e-03 | 1.7937e-04 | 2.6886e-04 | 1.7654e-04 |   0.6566 |      30.487 |    1.083 |  28.525 |  0.593 | x48.12
+  ------------------------------------------------------------------------------------------------------------------------------------
+
+Done. Tables above; figures in 'RF_dscan_results/'.

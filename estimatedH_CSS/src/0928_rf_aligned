@@ -1,0 +1,321 @@
+
+========================================================================
+run started 2026-09-27 20:38:57
+========================================================================
+Experiment B (RF backend): iterative sweep + oracle floor
+  D_LIST        = [70, 65, 60, 55, 50, 45, 40, 30, 20]
+  SEEDS         = [0]
+  N_ITERATIONS  = 4
+  RUN_ORACLE    = True
+  ACTIVE        = 2
+  N_ESTIMATORS  = 30
+  MAX_DEPTH     = None
+  BOOTSTRAP     = False
+  MAX_FEATURES  = 1.0
+  FUN_STR       = poly
+  ROTATION_MODE = None
+  N_TEST        = 3200
+  d=70: n=[3200, 6400, 12800], step_size=1.0000
+  d=65: n=[3200, 6400, 12800], step_size=1.0000
+  d=60: n=[3200, 6400, 12800], step_size=1.0000
+  d=55: n=[3200, 6400, 12800], step_size=1.0000
+  d=50: n=[3200, 6400, 12800], step_size=1.0000
+  d=45: n=[3200, 6400, 12800], step_size=1.0000
+  d=40: n=[3200, 6400, 12800], step_size=1.0000
+  d=30: n=[3200, 6400, 12800], step_size=1.0000
+  d=20: n=[3200, 6400, 12800], step_size=1.0000
+
+
+[d=70] seed=0  (n_max=12800, h=1.0000)
+2026-09-27 20:38:58.912123: W external/xla/xla/service/gpu/autotuning/dot_search_space.cc:200] All configs were filtered out because none of them sufficiently match the hints. Maybe the hints set does not contain a good representative set of valid configs?Working around this by using the full hints set instead.
+2026-09-27 20:39:00.424934: W external/xla/xla/service/gpu/autotuning/dot_search_space.cc:200] All configs were filtered out because none of them sufficiently match the hints. Maybe the hints set does not contain a good representative set of valid configs?Working around this by using the full hints set instead.
+    iter 1  (    13.1s): n=3200:0.0033  n=6400:0.0014  n=12800:0.0008
+    iter 2  (    15.9s): n=3200:0.0178  n=6400:0.0101  n=12800:0.0110
+    iter 3  (    15.6s): n=3200:0.0282  n=6400:0.0204  n=12800:0.0149
+    iter 4  (    15.4s): n=3200:0.0252  n=6400:0.0224  n=12800:0.0154
+2026-09-27 20:40:08.889299: W external/xla/xla/service/gpu/autotuning/dot_search_space.cc:200] All configs were filtered out because none of them sufficiently match the hints. Maybe the hints set does not contain a good representative set of valid configs?Working around this by using the full hints set instead.
+2026-09-27 20:40:09.674278: W external/xla/xla/service/gpu/autotuning/dot_search_space.cc:200] All configs were filtered out because none of them sufficiently match the hints. Maybe the hints set does not contain a good representative set of valid configs?Working around this by using the full hints set instead.
+    oracle          : n=3200:0.0000  n=6400:0.0000  n=12800:0.0000
+    metric noise floor (analytic, true value 0): 0.00e+00
+
+[d=65] seed=0  (n_max=12800, h=1.0000)
+2026-09-27 20:40:17.900379: W external/xla/xla/service/gpu/autotuning/dot_search_space.cc:200] All configs were filtered out because none of them sufficiently match the hints. Maybe the hints set does not contain a good representative set of valid configs?Working around this by using the full hints set instead.
+2026-09-27 20:40:19.088617: W external/xla/xla/service/gpu/autotuning/dot_search_space.cc:200] All configs were filtered out because none of them sufficiently match the hints. Maybe the hints set does not contain a good representative set of valid configs?Working around this by using the full hints set instead.
+    iter 1  (    12.2s): n=3200:0.0027  n=6400:0.0014  n=12800:0.0009
+    iter 2  (    15.1s): n=3200:0.0115  n=6400:0.0102  n=12800:0.0107
+    iter 3  (    14.7s): n=3200:0.0354  n=6400:0.0265  n=12800:0.0192
+    iter 4  (    13.8s): n=3200:0.0256  n=6400:0.0189  n=12800:0.0150
+2026-09-27 20:41:22.966299: W external/xla/xla/service/gpu/autotuning/dot_search_space.cc:200] All configs were filtered out because none of them sufficiently match the hints. Maybe the hints set does not contain a good representative set of valid configs?Working around this by using the full hints set instead.
+2026-09-27 20:41:23.713736: W external/xla/xla/service/gpu/autotuning/dot_search_space.cc:200] All configs were filtered out because none of them sufficiently match the hints. Maybe the hints set does not contain a good representative set of valid configs?Working around this by using the full hints set instead.
+    oracle          : n=3200:0.0000  n=6400:0.0000  n=12800:0.0000
+    metric noise floor (analytic, true value 0): 0.00e+00
+
+[d=60] seed=0  (n_max=12800, h=1.0000)
+2026-09-27 20:41:31.225093: W external/xla/xla/service/gpu/autotuning/dot_search_space.cc:200] All configs were filtered out because none of them sufficiently match the hints. Maybe the hints set does not contain a good representative set of valid configs?Working around this by using the full hints set instead.
+2026-09-27 20:41:32.136203: W external/xla/xla/service/gpu/autotuning/dot_search_space.cc:200] All configs were filtered out because none of them sufficiently match the hints. Maybe the hints set does not contain a good representative set of valid configs?Working around this by using the full hints set instead.
+    iter 1  (    11.2s): n=3200:0.0036  n=6400:0.0022  n=12800:0.0010
+    iter 2  (    13.7s): n=3200:0.0135  n=6400:0.0138  n=12800:0.0116
+    iter 3  (    14.0s): n=3200:0.0252  n=6400:0.0312  n=12800:0.0154
+    iter 4  (    12.9s): n=3200:0.0238  n=6400:0.0285  n=12800:0.0148
+2026-09-27 20:42:30.976008: W external/xla/xla/service/gpu/autotuning/dot_search_space.cc:200] All configs were filtered out because none of them sufficiently match the hints. Maybe the hints set does not contain a good representative set of valid configs?Working around this by using the full hints set instead.
+2026-09-27 20:42:31.700379: W external/xla/xla/service/gpu/autotuning/dot_search_space.cc:200] All configs were filtered out because none of them sufficiently match the hints. Maybe the hints set does not contain a good representative set of valid configs?Working around this by using the full hints set instead.
+    oracle          : n=3200:0.0002  n=6400:0.0002  n=12800:0.0002
+    metric noise floor (analytic, true value 0): 3.45e-04
+
+[d=55] seed=0  (n_max=12800, h=1.0000)
+2026-09-27 20:42:38.876441: W external/xla/xla/service/gpu/autotuning/dot_search_space.cc:200] All configs were filtered out because none of them sufficiently match the hints. Maybe the hints set does not contain a good representative set of valid configs?Working around this by using the full hints set instead.
+2026-09-27 20:42:39.771573: W external/xla/xla/service/gpu/autotuning/dot_search_space.cc:200] All configs were filtered out because none of them sufficiently match the hints. Maybe the hints set does not contain a good representative set of valid configs?Working around this by using the full hints set instead.
+    iter 1  (    10.1s): n=3200:0.0038  n=6400:0.0017  n=12800:0.0009
+    iter 2  (    12.6s): n=3200:0.0122  n=6400:0.0145  n=12800:0.0133
+    iter 3  (    11.8s): n=3200:0.0192  n=6400:0.0299  n=12800:0.0179
+    iter 4  (    12.0s): n=3200:0.0249  n=6400:0.0231  n=12800:0.0188
+2026-09-27 20:43:32.348005: W external/xla/xla/service/gpu/autotuning/dot_search_space.cc:200] All configs were filtered out because none of them sufficiently match the hints. Maybe the hints set does not contain a good representative set of valid configs?Working around this by using the full hints set instead.
+2026-09-27 20:43:32.995468: W external/xla/xla/service/gpu/autotuning/dot_search_space.cc:200] All configs were filtered out because none of them sufficiently match the hints. Maybe the hints set does not contain a good representative set of valid configs?Working around this by using the full hints set instead.
+    oracle          : n=3200:0.0002  n=6400:0.0002  n=12800:0.0002
+    metric noise floor (analytic, true value 0): 3.45e-04
+
+[d=50] seed=0  (n_max=12800, h=1.0000)
+2026-09-27 20:43:39.514813: W external/xla/xla/service/gpu/autotuning/dot_search_space.cc:200] All configs were filtered out because none of them sufficiently match the hints. Maybe the hints set does not contain a good representative set of valid configs?Working around this by using the full hints set instead.
+2026-09-27 20:43:40.547539: W external/xla/xla/service/gpu/autotuning/dot_search_space.cc:200] All configs were filtered out because none of them sufficiently match the hints. Maybe the hints set does not contain a good representative set of valid configs?Working around this by using the full hints set instead.
+    iter 1  (     9.3s): n=3200:0.0032  n=6400:0.0016  n=12800:0.0008
+    iter 2  (    11.1s): n=3200:0.0173  n=6400:0.0161  n=12800:0.0103
+    iter 3  (    10.9s): n=3200:0.0349  n=6400:0.0232  n=12800:0.0156
+    iter 4  (    10.3s): n=3200:0.0421  n=6400:0.0203  n=12800:0.0168
+2026-09-27 20:44:28.140086: W external/xla/xla/service/gpu/autotuning/dot_search_space.cc:200] All configs were filtered out because none of them sufficiently match the hints. Maybe the hints set does not contain a good representative set of valid configs?Working around this by using the full hints set instead.
+2026-09-27 20:44:29.064234: W external/xla/xla/service/gpu/autotuning/dot_search_space.cc:200] All configs were filtered out because none of them sufficiently match the hints. Maybe the hints set does not contain a good representative set of valid configs?Working around this by using the full hints set instead.
+    oracle          : n=3200:0.0000  n=6400:0.0000  n=12800:0.0000
+    metric noise floor (analytic, true value 0): 0.00e+00
+
+[d=45] seed=0  (n_max=12800, h=1.0000)
+2026-09-27 20:44:34.585226: W external/xla/xla/service/gpu/autotuning/dot_search_space.cc:200] All configs were filtered out because none of them sufficiently match the hints. Maybe the hints set does not contain a good representative set of valid configs?Working around this by using the full hints set instead.
+2026-09-27 20:44:35.100802: W external/xla/xla/service/gpu/autotuning/dot_search_space.cc:200] All configs were filtered out because none of them sufficiently match the hints. Maybe the hints set does not contain a good representative set of valid configs?Working around this by using the full hints set instead.
+2026-09-27 20:44:36.075474: W external/xla/xla/service/gpu/autotuning/dot_search_space.cc:200] All configs were filtered out because none of them sufficiently match the hints. Maybe the hints set does not contain a good representative set of valid configs?Working around this by using the full hints set instead.
+    iter 1  (     8.4s): n=3200:0.0025  n=6400:0.0019  n=12800:0.0009
+    iter 2  (     9.8s): n=3200:0.0164  n=6400:0.0112  n=12800:0.0075
+    iter 3  (     9.8s): n=3200:0.0276  n=6400:0.0278  n=12800:0.0110
+    iter 4  (    10.1s): n=3200:0.0248  n=6400:0.0273  n=12800:0.0103
+2026-09-27 20:45:20.151841: W external/xla/xla/service/gpu/autotuning/dot_search_space.cc:200] All configs were filtered out because none of them sufficiently match the hints. Maybe the hints set does not contain a good representative set of valid configs?Working around this by using the full hints set instead.
+2026-09-27 20:45:21.046979: W external/xla/xla/service/gpu/autotuning/dot_search_space.cc:200] All configs were filtered out because none of them sufficiently match the hints. Maybe the hints set does not contain a good representative set of valid configs?Working around this by using the full hints set instead.
+2026-09-27 20:45:25.839322: W external/xla/xla/service/gpu/autotuning/dot_search_space.cc:200] All configs were filtered out because none of them sufficiently match the hints. Maybe the hints set does not contain a good representative set of valid configs?Working around this by using the full hints set instead.
+    oracle          : n=3200:0.0000  n=6400:0.0000  n=12800:0.0000
+    metric noise floor (analytic, true value 0): 0.00e+00
+
+[d=40] seed=0  (n_max=12800, h=1.0000)
+2026-09-27 20:45:26.418323: W external/xla/xla/service/gpu/autotuning/dot_search_space.cc:200] All configs were filtered out because none of them sufficiently match the hints. Maybe the hints set does not contain a good representative set of valid configs?Working around this by using the full hints set instead.
+2026-09-27 20:45:26.853580: W external/xla/xla/service/gpu/autotuning/dot_search_space.cc:200] All configs were filtered out because none of them sufficiently match the hints. Maybe the hints set does not contain a good representative set of valid configs?Working around this by using the full hints set instead.
+2026-09-27 20:45:27.735449: W external/xla/xla/service/gpu/autotuning/dot_search_space.cc:200] All configs were filtered out because none of them sufficiently match the hints. Maybe the hints set does not contain a good representative set of valid configs?Working around this by using the full hints set instead.
+    iter 1  (     7.5s): n=3200:0.0043  n=6400:0.0017  n=12800:0.0008
+    iter 2  (     9.4s): n=3200:0.0175  n=6400:0.0126  n=12800:0.0078
+    iter 3  (     9.1s): n=3200:0.0279  n=6400:0.0197  n=12800:0.0124
+    iter 4  (     7.8s): n=3200:0.0303  n=6400:0.0202  n=12800:0.0124
+2026-09-27 20:46:06.165232: W external/xla/xla/service/gpu/autotuning/dot_search_space.cc:200] All configs were filtered out because none of them sufficiently match the hints. Maybe the hints set does not contain a good representative set of valid configs?Working around this by using the full hints set instead.
+2026-09-27 20:46:06.912991: W external/xla/xla/service/gpu/autotuning/dot_search_space.cc:200] All configs were filtered out because none of them sufficiently match the hints. Maybe the hints set does not contain a good representative set of valid configs?Working around this by using the full hints set instead.
+2026-09-27 20:46:11.193852: W external/xla/xla/service/gpu/autotuning/dot_search_space.cc:200] All configs were filtered out because none of them sufficiently match the hints. Maybe the hints set does not contain a good representative set of valid configs?Working around this by using the full hints set instead.
+    oracle          : n=3200:0.0002  n=6400:0.0002  n=12800:0.0002
+    metric noise floor (analytic, true value 0): 3.45e-04
+
+[d=30] seed=0  (n_max=12800, h=1.0000)
+    iter 1  (     5.6s): n=3200:0.0032  n=6400:0.0013  n=12800:0.0008
+    iter 2  (     6.3s): n=3200:0.0167  n=6400:0.0077  n=12800:0.0116
+    iter 3  (     6.4s): n=3200:0.0303  n=6400:0.0128  n=12800:0.0138
+    iter 4  (     6.8s): n=3200:0.0285  n=6400:0.0156  n=12800:0.0131
+    oracle          : n=3200:0.0002  n=6400:0.0002  n=12800:0.0002
+    metric noise floor (analytic, true value 0): 3.45e-04
+
+[d=20] seed=0  (n_max=12800, h=1.0000)
+    iter 1  (     3.8s): n=3200:0.0025  n=6400:0.0016  n=12800:0.0008
+    iter 2  (     4.1s): n=3200:0.0173  n=6400:0.0080  n=12800:0.0033
+    iter 3  (     3.5s): n=3200:0.0212  n=6400:0.0130  n=12800:0.0055
+    iter 4  (     4.4s): n=3200:0.0248  n=6400:0.0132  n=12800:0.0062
+    oracle          : n=3200:0.0000  n=6400:0.0000  n=12800:0.0000
+    metric noise floor (analytic, true value 0): 3.45e-04
+
+========================================================================
+Summary (median over 1 seed(s))
+========================================================================
+    d     method  iter       n     median                  IQR    slope
+   70  iterative     1    3200     0.0033     [0.0033, 0.0033]        -
+   70  iterative     1    6400     0.0014     [0.0014, 0.0014]   -1.272
+   70  iterative     1   12800     0.0008     [0.0008, 0.0008]   -0.697
+   70  iterative     2    3200     0.0178     [0.0178, 0.0178]        -
+   70  iterative     2    6400     0.0101     [0.0101, 0.0101]   -0.820
+   70  iterative     2   12800     0.0110     [0.0110, 0.0110]    0.123
+   70  iterative     3    3200     0.0282     [0.0282, 0.0282]        -
+   70  iterative     3    6400     0.0204     [0.0204, 0.0204]   -0.466
+   70  iterative     3   12800     0.0149     [0.0149, 0.0149]   -0.460
+   70  iterative     4    3200     0.0252     [0.0252, 0.0252]        -
+   70  iterative     4    6400     0.0224     [0.0224, 0.0224]   -0.173
+   70  iterative     4   12800     0.0154     [0.0154, 0.0154]   -0.538
+   70     oracle     -    3200     0.0000     [0.0000, 0.0000]        -
+   70     oracle     -    6400     0.0000     [0.0000, 0.0000]        -
+   70     oracle     -   12800     0.0000     [0.0000, 0.0000]        -
+   65  iterative     1    3200     0.0027     [0.0027, 0.0027]        -
+   65  iterative     1    6400     0.0014     [0.0014, 0.0014]   -0.883
+   65  iterative     1   12800     0.0009     [0.0009, 0.0009]   -0.739
+   65  iterative     2    3200     0.0115     [0.0115, 0.0115]        -
+   65  iterative     2    6400     0.0102     [0.0102, 0.0102]   -0.173
+   65  iterative     2   12800     0.0107     [0.0107, 0.0107]    0.069
+   65  iterative     3    3200     0.0354     [0.0354, 0.0354]        -
+   65  iterative     3    6400     0.0265     [0.0265, 0.0265]   -0.415
+   65  iterative     3   12800     0.0192     [0.0192, 0.0192]   -0.464
+   65  iterative     4    3200     0.0256     [0.0256, 0.0256]        -
+   65  iterative     4    6400     0.0189     [0.0189, 0.0189]   -0.441
+   65  iterative     4   12800     0.0150     [0.0150, 0.0150]   -0.331
+   65     oracle     -    3200     0.0000     [0.0000, 0.0000]        -
+   65     oracle     -    6400     0.0000     [0.0000, 0.0000]        -
+   65     oracle     -   12800     0.0000     [0.0000, 0.0000]        -
+   60  iterative     1    3200     0.0036     [0.0036, 0.0036]        -
+   60  iterative     1    6400     0.0022     [0.0022, 0.0022]   -0.709
+   60  iterative     1   12800     0.0010     [0.0010, 0.0010]   -1.163
+   60  iterative     2    3200     0.0135     [0.0135, 0.0135]        -
+   60  iterative     2    6400     0.0138     [0.0138, 0.0138]    0.031
+   60  iterative     2   12800     0.0116     [0.0116, 0.0116]   -0.260
+   60  iterative     3    3200     0.0252     [0.0252, 0.0252]        -
+   60  iterative     3    6400     0.0312     [0.0312, 0.0312]    0.309
+   60  iterative     3   12800     0.0154     [0.0154, 0.0154]   -1.023
+   60  iterative     4    3200     0.0238     [0.0238, 0.0238]        -
+   60  iterative     4    6400     0.0285     [0.0285, 0.0285]    0.259
+   60  iterative     4   12800     0.0148     [0.0148, 0.0148]   -0.944
+   60     oracle     -    3200     0.0002     [0.0002, 0.0002]        -
+   60     oracle     -    6400     0.0002     [0.0002, 0.0002]    0.000
+   60     oracle     -   12800     0.0002     [0.0002, 0.0002]    0.000
+   55  iterative     1    3200     0.0038     [0.0038, 0.0038]        -
+   55  iterative     1    6400     0.0017     [0.0017, 0.0017]   -1.109
+   55  iterative     1   12800     0.0009     [0.0009, 0.0009]   -0.973
+   55  iterative     2    3200     0.0122     [0.0122, 0.0122]        -
+   55  iterative     2    6400     0.0145     [0.0145, 0.0145]    0.253
+   55  iterative     2   12800     0.0133     [0.0133, 0.0133]   -0.128
+   55  iterative     3    3200     0.0192     [0.0192, 0.0192]        -
+   55  iterative     3    6400     0.0299     [0.0299, 0.0299]    0.637
+   55  iterative     3   12800     0.0179     [0.0179, 0.0179]   -0.735
+   55  iterative     4    3200     0.0249     [0.0249, 0.0249]        -
+   55  iterative     4    6400     0.0231     [0.0231, 0.0231]   -0.107
+   55  iterative     4   12800     0.0188     [0.0188, 0.0188]   -0.300
+   55     oracle     -    3200     0.0002     [0.0002, 0.0002]        -
+   55     oracle     -    6400     0.0002     [0.0002, 0.0002]    0.000
+   55     oracle     -   12800     0.0002     [0.0002, 0.0002]   -0.000
+   50  iterative     1    3200     0.0032     [0.0032, 0.0032]        -
+   50  iterative     1    6400     0.0016     [0.0016, 0.0016]   -1.022
+   50  iterative     1   12800     0.0008     [0.0008, 0.0008]   -0.974
+   50  iterative     2    3200     0.0173     [0.0173, 0.0173]        -
+   50  iterative     2    6400     0.0161     [0.0161, 0.0161]   -0.102
+   50  iterative     2   12800     0.0103     [0.0103, 0.0103]   -0.645
+   50  iterative     3    3200     0.0349     [0.0349, 0.0349]        -
+   50  iterative     3    6400     0.0232     [0.0232, 0.0232]   -0.591
+   50  iterative     3   12800     0.0156     [0.0156, 0.0156]   -0.570
+   50  iterative     4    3200     0.0421     [0.0421, 0.0421]        -
+   50  iterative     4    6400     0.0203     [0.0203, 0.0203]   -1.053
+   50  iterative     4   12800     0.0168     [0.0168, 0.0168]   -0.275
+   50     oracle     -    3200     0.0000     [0.0000, 0.0000]        -
+   50     oracle     -    6400     0.0000     [0.0000, 0.0000]        -
+   50     oracle     -   12800     0.0000     [0.0000, 0.0000]        -
+   45  iterative     1    3200     0.0025     [0.0025, 0.0025]        -
+   45  iterative     1    6400     0.0019     [0.0019, 0.0019]   -0.394
+   45  iterative     1   12800     0.0009     [0.0009, 0.0009]   -1.068
+   45  iterative     2    3200     0.0164     [0.0164, 0.0164]        -
+   45  iterative     2    6400     0.0112     [0.0112, 0.0112]   -0.547
+   45  iterative     2   12800     0.0075     [0.0075, 0.0075]   -0.576
+   45  iterative     3    3200     0.0276     [0.0276, 0.0276]        -
+   45  iterative     3    6400     0.0278     [0.0278, 0.0278]    0.010
+   45  iterative     3   12800     0.0110     [0.0110, 0.0110]   -1.333
+   45  iterative     4    3200     0.0248     [0.0248, 0.0248]        -
+   45  iterative     4    6400     0.0273     [0.0273, 0.0273]    0.141
+   45  iterative     4   12800     0.0103     [0.0103, 0.0103]   -1.407
+   45     oracle     -    3200     0.0000     [0.0000, 0.0000]        -
+   45     oracle     -    6400     0.0000     [0.0000, 0.0000]        -
+   45     oracle     -   12800     0.0000     [0.0000, 0.0000]        -
+   40  iterative     1    3200     0.0043     [0.0043, 0.0043]        -
+   40  iterative     1    6400     0.0017     [0.0017, 0.0017]   -1.287
+   40  iterative     1   12800     0.0008     [0.0008, 0.0008]   -1.132
+   40  iterative     2    3200     0.0175     [0.0175, 0.0175]        -
+   40  iterative     2    6400     0.0126     [0.0126, 0.0126]   -0.481
+   40  iterative     2   12800     0.0078     [0.0078, 0.0078]   -0.678
+   40  iterative     3    3200     0.0279     [0.0279, 0.0279]        -
+   40  iterative     3    6400     0.0197     [0.0197, 0.0197]   -0.501
+   40  iterative     3   12800     0.0124     [0.0124, 0.0124]   -0.665
+   40  iterative     4    3200     0.0303     [0.0303, 0.0303]        -
+   40  iterative     4    6400     0.0202     [0.0202, 0.0202]   -0.588
+   40  iterative     4   12800     0.0124     [0.0124, 0.0124]   -0.706
+   40     oracle     -    3200     0.0002     [0.0002, 0.0002]        -
+   40     oracle     -    6400     0.0002     [0.0002, 0.0002]    0.000
+   40     oracle     -   12800     0.0002     [0.0002, 0.0002]   -0.000
+   30  iterative     1    3200     0.0032     [0.0032, 0.0032]        -
+   30  iterative     1    6400     0.0013     [0.0013, 0.0013]   -1.297
+   30  iterative     1   12800     0.0008     [0.0008, 0.0008]   -0.633
+   30  iterative     2    3200     0.0167     [0.0167, 0.0167]        -
+   30  iterative     2    6400     0.0077     [0.0077, 0.0077]   -1.127
+   30  iterative     2   12800     0.0116     [0.0116, 0.0116]    0.604
+   30  iterative     3    3200     0.0303     [0.0303, 0.0303]        -
+   30  iterative     3    6400     0.0128     [0.0128, 0.0128]   -1.236
+   30  iterative     3   12800     0.0138     [0.0138, 0.0138]    0.107
+   30  iterative     4    3200     0.0285     [0.0285, 0.0285]        -
+   30  iterative     4    6400     0.0156     [0.0156, 0.0156]   -0.872
+   30  iterative     4   12800     0.0131     [0.0131, 0.0131]   -0.251
+   30     oracle     -    3200     0.0002     [0.0002, 0.0002]        -
+   30     oracle     -    6400     0.0002     [0.0002, 0.0002]    0.000
+   30     oracle     -   12800     0.0002     [0.0002, 0.0002]    0.000
+   20  iterative     1    3200     0.0025     [0.0025, 0.0025]        -
+   20  iterative     1    6400     0.0016     [0.0016, 0.0016]   -0.614
+   20  iterative     1   12800     0.0008     [0.0008, 0.0008]   -0.970
+   20  iterative     2    3200     0.0173     [0.0173, 0.0173]        -
+   20  iterative     2    6400     0.0080     [0.0080, 0.0080]   -1.111
+   20  iterative     2   12800     0.0033     [0.0033, 0.0033]   -1.266
+   20  iterative     3    3200     0.0212     [0.0212, 0.0212]        -
+   20  iterative     3    6400     0.0130     [0.0130, 0.0130]   -0.701
+   20  iterative     3   12800     0.0055     [0.0055, 0.0055]   -1.233
+   20  iterative     4    3200     0.0248     [0.0248, 0.0248]        -
+   20  iterative     4    6400     0.0132     [0.0132, 0.0132]   -0.913
+   20  iterative     4   12800     0.0062     [0.0062, 0.0062]   -1.088
+   20     oracle     -    3200     0.0000     [0.0000, 0.0000]        -
+   20     oracle     -    6400     0.0000     [0.0000, 0.0000]        -
+   20     oracle     -   12800     0.0000     [0.0000, 0.0000]        -
+
+========================================================================
+Best iterative vs oracle floor
+========================================================================
+    d       n       k=1      best  @k    oracle    ratio  iter gain
+   70    3200    0.0033    0.0033   1    0.0000        -       0.0%
+   70    6400    0.0014    0.0014   1    0.0000        -       0.0%
+   70   12800    0.0008    0.0008   1    0.0000        -       0.0%
+   65    3200    0.0027    0.0027   1    0.0000        -       0.0%
+   65    6400    0.0014    0.0014   1    0.0000        -       0.0%
+   65   12800    0.0009    0.0009   1    0.0000        -       0.0%
+   60    3200    0.0036    0.0036   1    0.0002     20.8       0.0%
+   60    6400    0.0022    0.0022   1    0.0002     12.7       0.0%
+   60   12800    0.0010    0.0010   1    0.0002      5.7       0.0%
+   55    3200    0.0038    0.0038   1    0.0002     23.3       0.0%
+   55    6400    0.0017    0.0017   1    0.0002     10.8       0.0%
+   55   12800    0.0009    0.0009   1    0.0002      5.5       0.0%
+   50    3200    0.0032    0.0032   1    0.0000        -       0.0%
+   50    6400    0.0016    0.0016   1    0.0000        -       0.0%
+   50   12800    0.0008    0.0008   1    0.0000        -       0.0%
+   45    3200    0.0025    0.0025   1    0.0000        -       0.0%
+   45    6400    0.0019    0.0019   1    0.0000        -       0.0%
+   45   12800    0.0009    0.0009   1    0.0000        -       0.0%
+   40    3200    0.0043    0.0043   1    0.0002     19.8       0.0%
+   40    6400    0.0017    0.0017   1    0.0002      8.1       0.0%
+   40   12800    0.0008    0.0008   1    0.0002      3.7       0.0%
+   30    3200    0.0032    0.0032   1    0.0002     13.7       0.0%
+   30    6400    0.0013    0.0013   1    0.0002      5.6       0.0%
+   30   12800    0.0008    0.0008   1    0.0002      3.6       0.0%
+   20    3200    0.0025    0.0025   1    0.0000        -       0.0%
+   20    6400    0.0016    0.0016   1    0.0000        -       0.0%
+   20   12800    0.0008    0.0008   1    0.0000        -       0.0%
+
+  ratio near 1  -> iteration has reached the estimator's floor
+  ratio large   -> iteration is far from its own ceiling
+  iter gain     -> how much the reiterations bought over the cold start
+wrote results/rf_aligned/expB_rf_d70.png
+wrote results/rf_aligned/expB_rf_d65.png
+wrote results/rf_aligned/expB_rf_d60.png
+wrote results/rf_aligned/expB_rf_d55.png
+wrote results/rf_aligned/expB_rf_d50.png
+wrote results/rf_aligned/expB_rf_d45.png
+wrote results/rf_aligned/expB_rf_d40.png
+wrote results/rf_aligned/expB_rf_d30.png
+wrote results/rf_aligned/expB_rf_d20.png
+wrote results/rf_aligned/expB_rf_all.png
+
+Done. Raw: results/rf_aligned/expB_rf_raw.csv
+      Summary: results/rf_aligned/expB_rf_summary.csv
+      Compare: results/rf_aligned/expB_rf_compare.csv

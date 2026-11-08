@@ -1,0 +1,29 @@
+DIM_LIST = [1000]
+ACTIVE = 2   CSS_K = 2
+SAMPLE_RANGE = [3200, 6400]
+N_ESTIMATORS (trees) = 30
+STEP_SIZE = 3.0   FUN_STR = poly   ROTATION_MODE = None
+EGOP backend = rf (explicit)   downstream = rf
+RF BOOTSTRAP = False   RF MAX_FEATURES = sqrt
+
+[d=1000  n=3200] EGOP(rf)   48.578s  angle_dist 0.012404  CSS cols [0, 1]
+    MSE   | no-trans 9.913139e-02 | trueH 7.978629e-04 | TrIM 5.403944e-04 | CSS 8.345132e-04 | CSS/TrIM 1.5443
+    time  | no-trans    1.433s | trueH    0.783s | TrIM    1.464s | CSS    0.466s | TrIM/CSS x3.14
+
+[d=1000  n=6400] EGOP(rf)   65.037s  angle_dist 0.004430  CSS cols [0, 1]
+    MSE   | no-trans 8.529982e-02 | trueH 3.908764e-04 | TrIM 1.861474e-04 | CSS 4.204182e-04 | CSS/TrIM 2.2585
+    time  | no-trans    2.377s | trueH    1.096s | TrIM    2.187s | CSS    0.544s | TrIM/CSS x4.02
+
+  ===== d-scan summary: n = 3200 (MAX_FEATURES=sqrt) =====
+  d     | EGOP(s) | angle_dist | no-trans MSE | trueH MSE  | TrIM MSE   | CSS MSE    | CSS/TrIM | no-trans(s) | trueH(s) | TrIM(s) | CSS(s) | TrIM/CSS
+  ------------------------------------------------------------------------------------------------------------------------------------
+  1000  |  48.578 |   0.012404 |   9.9131e-02 | 7.9786e-04 | 5.4039e-04 | 8.3451e-04 |   1.5443 |       1.433 |    0.783 |   1.464 |  0.466 | x3.14
+  ------------------------------------------------------------------------------------------------------------------------------------
+
+  ===== d-scan summary: n = 6400 (MAX_FEATURES=sqrt) =====
+  d     | EGOP(s) | angle_dist | no-trans MSE | trueH MSE  | TrIM MSE   | CSS MSE    | CSS/TrIM | no-trans(s) | trueH(s) | TrIM(s) | CSS(s) | TrIM/CSS
+  ------------------------------------------------------------------------------------------------------------------------------------
+  1000  |  65.037 |   0.004430 |   8.5300e-02 | 3.9088e-04 | 1.8615e-04 | 4.2042e-04 |   2.2585 |       2.377 |    1.096 |   2.187 |  0.544 | x4.02
+  ------------------------------------------------------------------------------------------------------------------------------------
+
+Done. Tables above; figures in 'RF_dscan_results/'.

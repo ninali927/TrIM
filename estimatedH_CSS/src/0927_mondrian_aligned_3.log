@@ -1,0 +1,44 @@
+
+========================================================================
+run started 2026-09-27 19:02:12
+========================================================================
+Experiment B (full): iterative sweep + oracle floor
+  EGOP_BACKEND  = mondrian (forced)
+  D_LIST        = [50, 55]
+  SEEDS         = [0]
+  N_ITERATIONS  = 4
+  RUN_ORACLE    = True
+  ACTIVE        = 2
+  LIFETIME      = 5
+  N_ESTIMATORS  = 30
+  FUN_STR       = poly
+  ROTATION_MODE = None
+  N_TEST        = 3200
+  d=50: n=[3200, 6400, 12800], step_size=1.0000
+  d=55: n=[3200, 6400, 12800], step_size=1.0000
+
+
+[d=50] seed=0  (n_max=12800, h=1.0000)
+2026-09-27 19:02:13.444074: W external/xla/xla/service/gpu/autotuning/dot_search_space.cc:200] All configs were filtered out because none of them sufficiently match the hints. Maybe the hints set does not contain a good representative set of valid configs?Working around this by using the full hints set instead.
+2026-09-27 19:02:14.761322: W external/xla/xla/service/gpu/autotuning/dot_search_space.cc:200] All configs were filtered out because none of them sufficiently match the hints. Maybe the hints set does not contain a good representative set of valid configs?Working around this by using the full hints set instead.
+Training the Mondrian Forests:
+  0%|          | 0/1 [00:00<?, ?it/s]100%|██████████| 1/1 [04:35<00:00, 275.22s/it]100%|██████████| 1/1 [04:35<00:00, 275.22s/it]
+  0%|          | 0/1 [00:00<?, ?it/s]100%|██████████| 1/1 [13:46<00:00, 826.10s/it]100%|██████████| 1/1 [13:46<00:00, 826.10s/it]
+  0%|          | 0/1 [00:00<?, ?it/s]100%|██████████| 1/1 [48:27<00:00, 2907.60s/it]100%|██████████| 1/1 [48:27<00:00, 2907.60s/it]
+    iter 1  (  4008.9s): n=3200:1.5138  n=6400:1.3541  n=12800:1.2508
+Traceback (most recent call last):
+  File "/home/ninali/TrIM_project/estimatedH_CSS/src/0919_exp.py", line 230, in <module>
+    sim.reiterate()
+  File "/home/ninali/TrIM_project/estimatedH_CSS/src/utils.py", line 188, in reiterate
+    self.forests[n_sim][trial].reiterate()
+  File "/home/ninali/TrIM_project/estimatedH_CSS/src/Mondrian_RF/Mondrian_forest.py", line 125, in reiterate
+    self.H = self.estimate_H_finite_diff()
+  File "/home/ninali/TrIM_project/estimatedH_CSS/src/Mondrian_RF/Mondrian_forest.py", line 106, in estimate_H_finite_diff
+    importance = self._get_importance()
+  File "/home/ninali/TrIM_project/estimatedH_CSS/src/Mondrian_RF/Mondrian_forest.py", line 93, in _get_importance
+    y_eval_neg = self.mf.predict(self.transform(x_eval_neg))
+  File "/home/ninali/TrIM_project/estimatedH_CSS/src/Mondrian_RF/Mondrian_forest.py", line 39, in predict
+    return evaluate(self.y, X, self.n_estimators, self.history, self.w_trees)
+  File "/home/ninali/TrIM_project/estimatedH_CSS/src/Mondrian_RF/utils.py", line 164, in evaluate
+    active_features_in_tree[m].remove(c)
+KeyboardInterrupt
