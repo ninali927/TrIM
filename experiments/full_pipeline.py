@@ -1,6 +1,9 @@
 """
-main.py
-=======
+full_pipeline.py   (was rotation_main.py)
+=================
+
+Run from the project root:
+    python -u experiments/full_pipeline.py > results/full_pipeline/run.log 2>&1
 
 Run TrIM paper-style experiment with (Weighted) CSS on either aligned or
 rotated data, sweeping CSS over a list of k values.
@@ -17,6 +20,13 @@ This main.py uses css_utils_weighted.evaluation_comparison_with_css, which:
     - emits one 6-method comparison figure per (n, k) plus one
       "best MSE vs k" summary figure per n.
 """
+
+# --- project paths: import from src/, write outputs under <project>/results/ ---
+import os, sys
+_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.join(_ROOT, "src"))
+os.chdir(_ROOT)
+# -------------------------------------------------------------------------------
 
 import os
 import numpy as np
@@ -65,14 +75,13 @@ print(f"ROTATION_MODE = {ROTATION_MODE}")
 # =============================================================
 # Output path
 # =============================================================
-out_dir = "results"
+out_dir = os.path.join("results", "full_pipeline")
 os.makedirs(out_dir, exist_ok=True)
 
 rotation_name = "aligned" if ROTATION_MODE is None else ROTATION_MODE
 save_prefix = os.path.join(
     out_dir,
-    f"0710_new_mondrian"
-    # f"{rotation_name}_{FUN_STR}_d{DIM_IN}_Nesti{N_ESTIMATORS}"
+    f"{rotation_name}_{FUN_STR}_d{DIM_IN}_Nesti{N_ESTIMATORS}"
 )
 
 

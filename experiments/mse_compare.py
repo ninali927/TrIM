@@ -30,10 +30,17 @@ each result is written to the CSV as soon as it finishes, so the run can be
 stopped at any time without losing finished cells. Mondrian is the slow part.
 
 Run with:
-    python -u mse_compare.py > mse_compare.log 2>&1
+    python -u experiments/mse_compare.py > results/mse_compare/run.log 2>&1   (from the project root)
 
 Output: results/mse_compare/mse_compare.csv
 """
+
+# --- project paths: import from src/, write outputs under <project>/results/ ---
+import os, sys
+_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.join(_ROOT, "src"))
+os.chdir(_ROOT)
+# -------------------------------------------------------------------------------
 
 import os
 import csv

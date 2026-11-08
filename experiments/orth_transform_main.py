@@ -17,10 +17,17 @@ Three methods, same estimated H_hat, same Mondrian settings, sweep lifetime:
 Within a seed, every method uses an identical Mondrian RNG stream, so MSE
 differences come from the transform alone.
 
-Usage:
-    python -u orth_transform_main.py         > results/orth_transform/run.log 2>&1
-    python -u orth_transform_main.py --smoke  (tiny run, checks the code works)
+Usage (from the project root):
+    python -u experiments/orth_transform_main.py > results/orth_transform/run.log 2>&1
+    python -u experiments/orth_transform_main.py --smoke   (tiny run, checks the code works)
 """
+
+# --- project paths: import from src/, write outputs under <project>/results/ ---
+import os, sys
+_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.join(_ROOT, "src"))
+os.chdir(_ROOT)
+# -------------------------------------------------------------------------------
 
 import argparse
 import os
